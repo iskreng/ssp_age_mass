@@ -9,11 +9,11 @@ warnings.filterwarnings('ignore')
 ##### BEGIN: User input #####
 
 data_file="Galaxy_NSCs_1Z.dat"
-data=pd.DataFrame({'f606w' : [23.09],\
+data=pd.DataFrame({'f606w' : [25.09],\
                    'f606w_err' : [0.03],\
-                   'f814w' : [22.2],\
+                   'f814w' : [24.2],\
                    'f814w_err' : [0.04],\
-                   'f160w' : [20.8],\
+                   'f160w' : [22.8],\
                    'f160w_err' : [0.05]})
                       
 parser = argparse.ArgumentParser()
@@ -104,6 +104,7 @@ plt.errorbar(data.f606w-data.f160w,data.f606w-data.f814w,\
              xerr=np.sqrt(data.f606w_err**2+data.f160w_err**2),\
              yerr=np.sqrt(data.f606w_err**2+data.f814w_err**2),marker='.')
 
+# Estimate the maximum likelihood model value for age and M/Lv
 temp = pd.DataFrame(columns=['ml_col1'])
 for col1,col1_err,col2,col2_err,col3,col3_err in zip((data.f606w-data.f160w),np.sqrt(data.f606w_err**2+data.f160w_err**2),\
                                        (data.f606w-data.f814w),np.sqrt(data.f606w_err**2+data.f814w_err**2),\
@@ -118,8 +119,13 @@ ssp_model_0p2Z['ml_col1']=temp
 age=pd.to_numeric(1e-9*10**(ssp_model_0p2Z['log_age_yr'][(ssp_model_0p2Z['ml_col1']==np.max(temp['ml_col1']))]))
 m_to_l=pd.to_numeric(ssp_model_0p2Z['M_star_tot_to_Lv'][(ssp_model_0p2Z['ml_col1']==np.max(temp['ml_col1']))])
 
+m_to_lv=m_to_l[182]
+
 for a,m in zip(age,m_to_l):
-    k='$M/L_V$ = {:.3g}'.format(m) + "; Age = {:.3g} Gyr".format(a)+''
+    mass=m_to_lv*( 10**( -0.4*(data.f606w-DM-M_sun_f606w) ) ) * 1e-6
+    k='$M/L_V$ = {:.3g}'.format(m) + "; Age = {:.3g} Gyr".format(a)+'\n$M$ = {:.2f}'.format(mass[0]) + 'x$10^6\ M_\odot$'
+#    data["mass"]=data["mass"].append(k*( 10**( -0.4*(data.f606w-DM-M_sun_f606w) ) ) * 1e-5)
+#    print(data["mass"])
     plt.annotate(k,xy=(1.6,1))
 print(data)
 
