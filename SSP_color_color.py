@@ -92,11 +92,12 @@ plt.errorbar(data.f606w-data.f160w,data.f606w-data.f814w,\
              yerr=np.sqrt(data.f606w_err**2+data.f814w_err**2),marker='.')
 
 temp = pd.DataFrame(columns=['ml_col1'])
-for col1,col1_err in zip((data.f606w-data.f160w),np.sqrt(data.f606w_err**2+data.f160w_err**2)):
-    for mod_col1 in ssp_model_0p2Z['606m160'] :
-        a=(1./(col1_err*np.sqrt(2.*np.pi)))
-        b=np.log(a*np.exp(-(col1-mod_col1)**2 / (2*col1_err**2)))
-        temp = temp.append({'ml_col1': b}, ignore_index=True)
+for col1,col1_err,col2,col2_err in zip((data.f606w-data.f160w),np.sqrt(data.f606w_err**2+data.f160w_err**2),(data.f606w-data.f814w),np.sqrt(data.f606w_err**2+data.f814w_err**2)):
+    for mod_col1,mod_col2 in zip(ssp_model_0p2Z['606m160'],ssp_model_0p2Z['606m814']) :
+        a=(1./(col1_err*np.sqrt(2.*np.pi)))*(1./(col2_err*np.sqrt(2.*np.pi)))
+        b=np.exp(-(col1-mod_col1)**2 / (2*col1_err**2))*np.exp(-(col2-mod_col2)**2 / (2*col2_err**2))
+        c=np.log(a*b)
+        temp = temp.append({'ml_col1': c}, ignore_index=True)
 
 ssp_model_0p2Z['ml_col1']=temp
 age=pd.to_numeric(1e-9*10**(ssp_model_0p2Z['log_age_yr'][(ssp_model_0p2Z['ml_col1']==np.max(temp['ml_col1']))]))
