@@ -1,3 +1,4 @@
+import argparse
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -15,6 +16,13 @@ data=pd.DataFrame({'f606w' : [23.09],\
                    'f160w' : [20.8],\
                    'f160w_err' : [0.05]})
                       
+parser = argparse.ArgumentParser()
+parser.add_argument("--m606",type=float)
+input=parser.parse_args()
+if input.m606 :
+    data['f606w']=input.m606
+    print(input.m606)
+
 ssp_model_file_Z="bc03/cb07_12/cb07_hr_stelib_m62_kroup_ssp_colnm.dat"
 ssp_model_file_0p005Z="bc03/cb07_12/cb07_hr_stelib_m22_kroup_ssp_colnm.dat"
 ssp_model_file_0p04Z="bc03/cb07_12/cb07_hr_stelib_m32_kroup_ssp_colnm.dat"
