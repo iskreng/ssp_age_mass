@@ -8,7 +8,7 @@ warnings.filterwarnings('ignore')
 ##### BEGIN: User input #####
 
 data_file="Galaxy_NSCs_1Z.dat"
-data=pd.DataFrame({'f606w' : [23.05],\
+data=pd.DataFrame({'f606w' : [23.09],\
                    'f606w_err' : [0.03],\
                    'f814w' : [22.2],\
                    'f814w_err' : [0.04],\
@@ -81,21 +81,23 @@ plt.ylabel("F606W-F814W [mag]")
 #plt.ylim(0,1.8) # plt.gca().invert_yaxis()
 #plt.xlim(0,2.8)
        
-plt.plot(ssp_model_Z['606m160'],ssp_model_Z['606m814'], color='red', linestyle='-')
-plt.plot(ssp_model_0p005Z['606m160'],ssp_model_0p005Z['606m814'], color='blue', linestyle='-')
-plt.plot(ssp_model_0p02Z['606m160'],ssp_model_0p02Z['606m814'], color='darkblue', linestyle='-')
+plt.plot(ssp_model_Z['606m160'],ssp_model_Z['606m814'], color='red', linestyle='-', label='1Z')
+plt.plot(ssp_model_0p005Z['606m160'],ssp_model_0p005Z['606m814'], color='blue', linestyle='-', label='0.005Z')
+plt.plot(ssp_model_0p02Z['606m160'],ssp_model_0p02Z['606m814'], color='darkblue', linestyle='-', label='0.02Z')
 #plt.plot(color2_0p04Z,color1_0p04Z, color='royalblue', linestyle='-')
-plt.plot(ssp_model_0p2Z['606m160'],ssp_model_0p2Z['606m814'], color='darkorange', linestyle='-')
-plt.plot(ssp_model_2p5Z['606m160'],ssp_model_2p5Z['606m814'], color='brown', linestyle='-')
+plt.plot(ssp_model_0p2Z['606m160'],ssp_model_0p2Z['606m814'], color='darkorange', linestyle='-', label='0.2Z')
+plt.plot(ssp_model_2p5Z['606m160'],ssp_model_2p5Z['606m814'], color='brown', linestyle='-', label='2.5Z')
 plt.errorbar(data.f606w-data.f160w,data.f606w-data.f814w,\
              xerr=np.sqrt(data.f606w_err**2+data.f160w_err**2),\
              yerr=np.sqrt(data.f606w_err**2+data.f814w_err**2),marker='.')
 
 temp = pd.DataFrame(columns=['ml_col1'])
-for col1,col1_err,col2,col2_err in zip((data.f606w-data.f160w),np.sqrt(data.f606w_err**2+data.f160w_err**2),(data.f606w-data.f814w),np.sqrt(data.f606w_err**2+data.f814w_err**2)):
-    for mod_col1,mod_col2 in zip(ssp_model_0p2Z['606m160'],ssp_model_0p2Z['606m814']) :
-        a=(1./(col1_err*np.sqrt(2.*np.pi)))*(1./(col2_err*np.sqrt(2.*np.pi)))
-        b=np.exp(-(col1-mod_col1)**2 / (2*col1_err**2))*np.exp(-(col2-mod_col2)**2 / (2*col2_err**2))
+for col1,col1_err,col2,col2_err,col3,col3_err in zip((data.f606w-data.f160w),np.sqrt(data.f606w_err**2+data.f160w_err**2),\
+                                       (data.f606w-data.f814w),np.sqrt(data.f606w_err**2+data.f814w_err**2),\
+                                       (data.f814w-data.f160w),np.sqrt(data.f814w_err**2+data.f160w_err**2)):
+    for mod_col1,mod_col2,mod_col3 in zip(ssp_model_0p2Z['606m160'],ssp_model_0p2Z['606m814'],ssp_model_0p2Z['V_m_F160w_wfc3']-ssp_model_0p2Z['V_m_F814w_uvis'],) :
+        a=(1./(col1_err*np.sqrt(2.*np.pi)))*(1./(col2_err*np.sqrt(2.*np.pi)))*(1./(col3_err*np.sqrt(2.*np.pi)))
+        b=np.exp(-(col1-mod_col1)**2 / (2*col1_err**2))*np.exp(-(col2-mod_col2)**2 / (2*col2_err**2))*np.exp(-(col3-mod_col3)**2 / (2*col3_err**2))
         c=np.log(a*b)
         temp = temp.append({'ml_col1': c}, ignore_index=True)
 
@@ -106,6 +108,10 @@ m_to_l=pd.to_numeric(ssp_model_0p2Z['M_star_tot_to_Lv'][(ssp_model_0p2Z['ml_col1
 for a,m in zip(age,m_to_l):
     print(a,m); k='$M/L_V$ = {:.3g}'.format(m) + "; Age = {:.3g} Gyr".format(a)+''
     plt.annotate(k,xy=(1.6,1))
+
+plt.legend(loc=4,fontsize=10,ncol=2,columnspacing=.5,markerscale=0.28,framealpha=0)
+
+plt.tight_layout()
 
 plt.savefig("test.pdf")
 
