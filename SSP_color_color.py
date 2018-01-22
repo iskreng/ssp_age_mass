@@ -23,13 +23,10 @@ parser.add_argument("--m160",type=float)
 input=parser.parse_args()
 if input.m606 :
     data['f606w']=input.m606
-    print(input.m606)
 if input.m814 :
     data['f814w']=input.m814
-    print(input.m814)
 if input.m160 :
     data['f160w']=input.m160
-    print(input.m160)
 
 ssp_model_file_Z="bc03/cb07_12/cb07_hr_stelib_m62_kroup_ssp_colnm.dat"
 ssp_model_file_0p005Z="bc03/cb07_12/cb07_hr_stelib_m22_kroup_ssp_colnm.dat"
@@ -121,9 +118,9 @@ ssp_model_0p2Z['ml_col1']=temp
 age=pd.to_numeric(1e-9*10**(ssp_model_0p2Z['log_age_yr'][(ssp_model_0p2Z['ml_col1']==np.max(temp['ml_col1']))]))
 m_to_l=pd.to_numeric(ssp_model_0p2Z['M_star_tot_to_Lv'][(ssp_model_0p2Z['ml_col1']==np.max(temp['ml_col1']))])
 
-#for a,m in zip(age,m_to_l):
-#    print(a,m); k='$M/L_V$ = {:.3g}'.format(m) + "; Age = {:.3g} Gyr".format(a)+''
-#    plt.annotate(k,xy=(1.6,1))
+for a,m in zip(age,m_to_l):
+    k='$M/L_V$ = {:.3g}'.format(m) + "; Age = {:.3g} Gyr".format(a)+''
+    plt.annotate(k,xy=(1.6,1))
 print(data)
 
 plt.legend(loc=4,fontsize=10,ncol=2,columnspacing=.5,markerscale=0.28,framealpha=0)
