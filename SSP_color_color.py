@@ -119,8 +119,8 @@ ssp_model_0p2Z['ml_col1']=temp
 age=pd.to_numeric(1e-9*10**(ssp_model_0p2Z['log_age_yr'][(ssp_model_0p2Z['ml_col1']==np.max(temp['ml_col1']))]))
 m_to_l=pd.to_numeric(ssp_model_0p2Z['M_star_tot_to_Lv'][(ssp_model_0p2Z['ml_col1']==np.max(temp['ml_col1']))])
 
-m_to_lv=m_to_l[182]
-
+m_to_lv=m_to_l.values
+      
 for a,m in zip(age,m_to_l):
     mass=m_to_lv*( 10**( -0.4*(data.f606w-DM-M_sun_f606w) ) ) * 1e-6
     k='$M/L_V$ = {:.3g}'.format(m) + "; Age = {:.3g} Gyr".format(a)+'\n$M$ = {:.2f}'.format(mass[0]) + 'x$10^6\ M_\odot$'
