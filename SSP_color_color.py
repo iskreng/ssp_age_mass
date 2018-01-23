@@ -56,17 +56,17 @@ if input.m160 :
 print("SSP for Age > {:.2f}".format(1e-9*10**(lg_age_limit)))
 
 ssp_model_Z = pd.read_table(ssp_model_file_Z, delim_whitespace=True, engine='c', na_values='INDEF',
-                              header=None, comment='#', names=['log_age_yr','Vmag','M_star_tot_to_Lv','V_m_F160w_wfc3', 'V_m_F606w_uvis', 'V_m_F814w_uvis'], usecols=[0,13,58,95,109,114])
+                              header=None, comment='#', names=['log_age_yr','Vmag','M_star_tot_to_Lv', 'M_star_liv_to_Lv','V_m_F160w_wfc3', 'V_m_F606w_uvis', 'V_m_F814w_uvis'], usecols=[0,13,58,61,95,109,114])
 ssp_model_0p005Z = pd.read_table(ssp_model_file_0p005Z, delim_whitespace=True, engine='c', na_values='INDEF',
-                              header=None, comment='#', names=['log_age_yr','Vmag','M_star_tot_to_Lv','V_m_F160w_wfc3', 'V_m_F606w_uvis', 'V_m_F814w_uvis'], usecols=[0,13,58,95,109,114])
+                              header=None, comment='#', names=['log_age_yr','Vmag','M_star_tot_to_Lv', 'M_star_liv_to_Lv','V_m_F160w_wfc3', 'V_m_F606w_uvis', 'V_m_F814w_uvis'], usecols=[0,13,58,61,95,109,114])
 ssp_model_0p02Z = pd.read_table(ssp_model_file_0p02Z, delim_whitespace=True, engine='c', na_values='INDEF',
-                              header=None, comment='#', names=['log_age_yr','Vmag','M_star_tot_to_Lv','V_m_F160w_wfc3', 'V_m_F606w_uvis', 'V_m_F814w_uvis'], usecols=[0,13,58,95,109,114])
+                              header=None, comment='#', names=['log_age_yr','Vmag','M_star_tot_to_Lv', 'M_star_liv_to_Lv','V_m_F160w_wfc3', 'V_m_F606w_uvis', 'V_m_F814w_uvis'], usecols=[0,13,58,61,95,109,114])
 ssp_model_0p04Z = pd.read_table(ssp_model_file_0p04Z, delim_whitespace=True, engine='c', na_values='INDEF',
-                              header=None, comment='#', names=['log_age_yr','Vmag','M_star_tot_to_Lv','V_m_F160w_wfc3', 'V_m_F606w_uvis', 'V_m_F814w_uvis'], usecols=[0,13,58,95,109,114])
+                              header=None, comment='#', names=['log_age_yr','Vmag','M_star_tot_to_Lv', 'M_star_liv_to_Lv','V_m_F160w_wfc3', 'V_m_F606w_uvis', 'V_m_F814w_uvis'], usecols=[0,13,58,61,95,109,114])
 ssp_model_0p2Z = pd.read_table(ssp_model_file_0p2Z, delim_whitespace=True, engine='c', na_values='INDEF',
-                              header=None, comment='#', names=['log_age_yr','Vmag','M_star_tot_to_Lv','V_m_F160w_wfc3', 'V_m_F606w_uvis', 'V_m_F814w_uvis'], usecols=[0,13,58,95,109,114])
+                              header=None, comment='#', names=['log_age_yr','Vmag','M_star_tot_to_Lv', 'M_star_liv_to_Lv','V_m_F160w_wfc3', 'V_m_F606w_uvis', 'V_m_F814w_uvis'], usecols=[0,13,58,61,95,109,114])
 ssp_model_2p5Z = pd.read_table(ssp_model_file_2p5Z, delim_whitespace=True, engine='c', na_values='INDEF',
-                              header=None, comment='#', names=['log_age_yr','Vmag','M_star_tot_to_Lv','V_m_F160w_wfc3', 'V_m_F606w_uvis', 'V_m_F814w_uvis'], usecols=[0,13,58,95,109,114])
+                              header=None, comment='#', names=['log_age_yr','Vmag','M_star_tot_to_Lv', 'M_star_liv_to_Lv','V_m_F160w_wfc3', 'V_m_F606w_uvis', 'V_m_F814w_uvis'], usecols=[0,13,58,61,95,109,114])
 
 select=ssp_model_Z['log_age_yr']>=lg_age_limit; select=ssp_model_0p005Z['log_age_yr']>=lg_age_limit; select=ssp_model_2p5Z['log_age_yr']>=lg_age_limit; 
 
@@ -132,6 +132,7 @@ for col1,col1_err,col2,col2_err,col3,col3_err in zip((data.f606w-data.f160w),np.
 ssp_model_0p2Z['ml_col1']=temp
 age=pd.to_numeric(1e-9*10**(ssp_model_0p2Z['log_age_yr'][(ssp_model_0p2Z['ml_col1']==np.max(temp['ml_col1']))]))
 m_to_l=pd.to_numeric(ssp_model_0p2Z['M_star_tot_to_Lv'][(ssp_model_0p2Z['ml_col1']==np.max(temp['ml_col1']))])
+#m_to_l=pd.to_numeric(ssp_model_0p2Z['M_star_liv_to_Lv'][(ssp_model_0p2Z['ml_col1']==np.max(temp['ml_col1']))])
 
 m_to_lv=m_to_l.values
       
