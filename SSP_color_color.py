@@ -16,18 +16,6 @@ data=pd.DataFrame({'f606w' : [25.09],\
                    'f160w' : [22.8],\
                    'f160w_err' : [0.05]})
                       
-parser = argparse.ArgumentParser()
-parser.add_argument("--m606",type=float)
-parser.add_argument("--m814",type=float)
-parser.add_argument("--m160",type=float)
-input=parser.parse_args()
-if input.m606 :
-    data['f606w']=input.m606
-if input.m814 :
-    data['f814w']=input.m814
-if input.m160 :
-    data['f160w']=input.m160
-
 ssp_model_file_Z="bc03/cb07_12/cb07_hr_stelib_m62_kroup_ssp_colnm.dat"
 ssp_model_file_0p005Z="bc03/cb07_12/cb07_hr_stelib_m22_kroup_ssp_colnm.dat"
 ssp_model_file_0p04Z="bc03/cb07_12/cb07_hr_stelib_m32_kroup_ssp_colnm.dat"
@@ -35,11 +23,37 @@ ssp_model_file_0p02Z="bc03/cb07_12/cb07_hr_stelib_m42_kroup_ssp_colnm.dat"
 ssp_model_file_0p2Z="bc03/cb07_12/cb07_hr_stelib_m52_kroup_ssp_colnm.dat"
 ssp_model_file_2p5Z="bc03/cb07_12/cb07_hr_stelib_m72_kroup_ssp_colnm.dat"
 
-lg_age_limit=9.3; print("SSP for Age > {:.2f}".format(1e-9*10**(lg_age_limit)))
+lg_age_limit=9.3
 DM=34.9              # Distance modulus
 M_sun_f606w=4.66    # Abs magnitude of the Sun
-ssp_Z_lum_scale=1e6   # Scale the SSP model to 1e6 L_sun
+ssp_lum_scale=1e6   # Scale the SSP model to 1e6 L_sun
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--m606",type=float)
+parser.add_argument("--m814",type=float)
+parser.add_argument("--m160",type=float)
+parser.add_argument("--lg_age_lim",type=float)
+parser.add_argument("--mM",type=float)
+parser.add_argument("--M_sun_f606w",type=float)
+parser.add_argument("--ssp_lum_scale",type=float)
+input=parser.parse_args()
+if input.m606 :
+    data['f606w']=input.m606
+if input.m814 :
+    data['f814w']=input.m814
+if input.m160 :
+    data['f160w']=input.m160
+if input.lg_age_lim :
+    lg_age_limit=input.lg_age_lim
+if input.mM :
+    DM=input.mM
+if input.M_sun_f606w :
+    M_sun_f606w=input.M_sun_f606w
+if input.m160 :
+    ssp_lum_scale=input.ssp_lum_scale
+
 ##### END: User input #####
+print("SSP for Age > {:.2f}".format(1e-9*10**(lg_age_limit)))
 
 ssp_model_Z = pd.read_table(ssp_model_file_Z, delim_whitespace=True, engine='c', na_values='INDEF',
                               header=None, comment='#', names=['log_age_yr','Vmag','M_star_tot_to_Lv','V_m_F160w_wfc3', 'V_m_F606w_uvis', 'V_m_F814w_uvis'], usecols=[0,13,58,95,109,114])
@@ -56,22 +70,22 @@ ssp_model_2p5Z = pd.read_table(ssp_model_file_2p5Z, delim_whitespace=True, engin
 
 select=ssp_model_Z['log_age_yr']>=lg_age_limit; select=ssp_model_0p005Z['log_age_yr']>=lg_age_limit; select=ssp_model_2p5Z['log_age_yr']>=lg_age_limit; 
 
-ssp_model_Z['mag_Z']=ssp_model_Z['Vmag'][select]-ssp_model_Z['V_m_F606w_uvis'][select] - 2.5*np.log10(8.55e1*ssp_Z_lum_scale/(ssp_model_Z['M_star_tot_to_Lv'][select])) +DM
+ssp_model_Z['mag_Z']=ssp_model_Z['Vmag'][select]-ssp_model_Z['V_m_F606w_uvis'][select] - 2.5*np.log10(8.55e1*ssp_lum_scale/(ssp_model_Z['M_star_tot_to_Lv'][select])) +DM
 ssp_model_Z['606m814']=ssp_model_Z['V_m_F814w_uvis'][select]-ssp_model_Z['V_m_F606w_uvis'][select]
 ssp_model_Z['606m160']=ssp_model_Z['V_m_F160w_wfc3'][select]-ssp_model_Z['V_m_F606w_uvis'][select]
-mag_0p005Z=ssp_model_0p005Z['Vmag'][select]-ssp_model_0p005Z['V_m_F606w_uvis'][select] - 2.5*np.log10(8.55e1*ssp_Z_lum_scale/(ssp_model_0p005Z['M_star_tot_to_Lv'][select]))+DM
+mag_0p005Z=ssp_model_0p005Z['Vmag'][select]-ssp_model_0p005Z['V_m_F606w_uvis'][select] - 2.5*np.log10(8.55e1*ssp_lum_scale/(ssp_model_0p005Z['M_star_tot_to_Lv'][select]))+DM
 ssp_model_0p005Z['606m814']=ssp_model_0p005Z['V_m_F814w_uvis'][select]-ssp_model_0p005Z['V_m_F606w_uvis'][select]
 ssp_model_0p005Z['606m160']=ssp_model_0p005Z['V_m_F160w_wfc3'][select]-ssp_model_0p005Z['V_m_F606w_uvis'][select]
-mag_0p02Z=ssp_model_0p02Z['Vmag'][select]-ssp_model_0p02Z['V_m_F606w_uvis'][select] - 2.5*np.log10(8.55e1*ssp_Z_lum_scale/(ssp_model_0p02Z['M_star_tot_to_Lv'][select]))+DM
+mag_0p02Z=ssp_model_0p02Z['Vmag'][select]-ssp_model_0p02Z['V_m_F606w_uvis'][select] - 2.5*np.log10(8.55e1*ssp_lum_scale/(ssp_model_0p02Z['M_star_tot_to_Lv'][select]))+DM
 ssp_model_0p02Z['606m814']=ssp_model_0p02Z['V_m_F814w_uvis'][select]-ssp_model_0p02Z['V_m_F606w_uvis'][select]
 ssp_model_0p02Z['606m160']=ssp_model_0p02Z['V_m_F160w_wfc3'][select]-ssp_model_0p02Z['V_m_F606w_uvis'][select]
-mag_0p04Z=ssp_model_0p04Z['Vmag'][select]-ssp_model_0p04Z['V_m_F606w_uvis'][select] - 2.5*np.log10(8.55e1*ssp_Z_lum_scale/(ssp_model_0p04Z['M_star_tot_to_Lv'][select]))+DM
+mag_0p04Z=ssp_model_0p04Z['Vmag'][select]-ssp_model_0p04Z['V_m_F606w_uvis'][select] - 2.5*np.log10(8.55e1*ssp_lum_scale/(ssp_model_0p04Z['M_star_tot_to_Lv'][select]))+DM
 ssp_model_0p04Z['606m814']=ssp_model_0p04Z['V_m_F814w_uvis'][select]-ssp_model_0p04Z['V_m_F606w_uvis'][select]
 ssp_model_0p04Z['606m160']=ssp_model_0p04Z['V_m_F160w_wfc3'][select]-ssp_model_0p04Z['V_m_F606w_uvis'][select]
-mag_0p2Z=ssp_model_0p2Z['Vmag'][select]-ssp_model_0p2Z['V_m_F606w_uvis'][select] - 2.5*np.log10(8.55e1*ssp_Z_lum_scale/(ssp_model_0p2Z['M_star_tot_to_Lv'][select]))+DM
+mag_0p2Z=ssp_model_0p2Z['Vmag'][select]-ssp_model_0p2Z['V_m_F606w_uvis'][select] - 2.5*np.log10(8.55e1*ssp_lum_scale/(ssp_model_0p2Z['M_star_tot_to_Lv'][select]))+DM
 ssp_model_0p2Z['606m814']=ssp_model_0p2Z['V_m_F814w_uvis'][select]-ssp_model_0p2Z['V_m_F606w_uvis'][select]
 ssp_model_0p2Z['606m160']=ssp_model_0p2Z['V_m_F160w_wfc3'][select]-ssp_model_0p2Z['V_m_F606w_uvis'][select]
-mag_2p5Z=ssp_model_2p5Z['Vmag'][select]-ssp_model_2p5Z['V_m_F606w_uvis'][select] - 2.5*np.log10(8.55e1*ssp_Z_lum_scale/(ssp_model_2p5Z['M_star_tot_to_Lv'][select]))+DM
+mag_2p5Z=ssp_model_2p5Z['Vmag'][select]-ssp_model_2p5Z['V_m_F606w_uvis'][select] - 2.5*np.log10(8.55e1*ssp_lum_scale/(ssp_model_2p5Z['M_star_tot_to_Lv'][select]))+DM
 ssp_model_2p5Z['606m814']=ssp_model_2p5Z['V_m_F814w_uvis'][select]-ssp_model_2p5Z['V_m_F606w_uvis'][select]
 ssp_model_2p5Z['606m160']=ssp_model_2p5Z['V_m_F160w_wfc3'][select]-ssp_model_2p5Z['V_m_F606w_uvis'][select]
 
@@ -119,8 +133,8 @@ ssp_model_0p2Z['ml_col1']=temp
 age=pd.to_numeric(1e-9*10**(ssp_model_0p2Z['log_age_yr'][(ssp_model_0p2Z['ml_col1']==np.max(temp['ml_col1']))]))
 m_to_l=pd.to_numeric(ssp_model_0p2Z['M_star_tot_to_Lv'][(ssp_model_0p2Z['ml_col1']==np.max(temp['ml_col1']))])
 
-m_to_lv=m_to_l[182]
-
+m_to_lv=m_to_l.values
+      
 for a,m in zip(age,m_to_l):
     mass=m_to_lv*( 10**( -0.4*(data.f606w-DM-M_sun_f606w) ) ) * 1e-6
     k='$M/L_V$ = {:.3g}'.format(m) + "; Age = {:.3g} Gyr".format(a)+'\n$M$ = {:.2f}'.format(mass[0]) + 'x$10^6\ M_\odot$'
