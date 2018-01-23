@@ -9,4 +9,5 @@ Usage:
 python3 SSP_color_color.py 
 
 2. Custom magnitudes and distance modulus:
+
 python3 SSP_color_color.py --m606 <value> --m814 <value> --m160 <value> --mM <value>
