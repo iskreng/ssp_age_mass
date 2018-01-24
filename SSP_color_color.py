@@ -119,24 +119,25 @@ plt.errorbar(data.f606w-data.f160w,data.f606w-data.f814w,\
              yerr=np.sqrt(data.f606w_err**2+data.f814w_err**2),marker='.')
 
 # Estimate the maximum likelihood model value for age and M/Lv
-temp = pd.DataFrame(columns=['ml_col1'])
+model=ssp_model_0p2Z
+temp = pd.DataFrame(columns=['ml_mod0p2Z'])
 for col1,col1_err,col2,col2_err,col3,col3_err in zip((data.f606w-data.f160w),np.sqrt(data.f606w_err**2+data.f160w_err**2),\
                                        (data.f606w-data.f814w),np.sqrt(data.f606w_err**2+data.f814w_err**2),\
                                        (data.f814w-data.f160w),np.sqrt(data.f814w_err**2+data.f160w_err**2)):
-    for mod_col1,mod_col2,mod_col3 in zip(ssp_model_0p2Z['606m160'],ssp_model_0p2Z['606m814'],ssp_model_0p2Z['V_m_F160w_wfc3']-ssp_model_0p2Z['V_m_F814w_uvis'],) :
+    for mod_col1,mod_col2,mod_col3 in zip(model['606m160'],model['606m814'],model['V_m_F160w_wfc3']-model['V_m_F814w_uvis']) :
         a=(1./(col1_err*np.sqrt(2.*np.pi)))*(1./(col2_err*np.sqrt(2.*np.pi)))*(1./(col3_err*np.sqrt(2.*np.pi)))
         b=np.exp(-(col1-mod_col1)**2 / (2*col1_err**2))*np.exp(-(col2-mod_col2)**2 / (2*col2_err**2))*np.exp(-(col3-mod_col3)**2 / (2*col3_err**2))
         c=np.log(a*b)
-        temp = temp.append({'ml_col1': c}, ignore_index=True)
+        temp = temp.append({'ml_mod0p2Z': c}, ignore_index=True)
 
-ssp_model_0p2Z['ml_col1']=temp
-age=pd.to_numeric(1e-9*10**(ssp_model_0p2Z['log_age_yr'][(ssp_model_0p2Z['ml_col1']==np.max(temp['ml_col1']))]))
-m_to_l=pd.to_numeric(ssp_model_0p2Z['M_star_tot_to_Lv'][(ssp_model_0p2Z['ml_col1']==np.max(temp['ml_col1']))])
-#m_to_l=pd.to_numeric(ssp_model_0p2Z['M_star_liv_to_Lv'][(ssp_model_0p2Z['ml_col1']==np.max(temp['ml_col1']))])
+model['ml_mod0p2Z']=temp
+age=pd.to_numeric(1e-9*10**(model['log_age_yr'][(model['ml_mod0p2Z']==np.max(temp['ml_mod0p2Z']))]))
+m_to_l=pd.to_numeric(model['M_star_tot_to_Lv'][(model['ml_mod0p2Z']==np.max(temp['ml_mod0p2Z']))])
+#m_to_l=pd.to_numeric(model['M_star_liv_to_Lv'][(model['ml_mod0p2Z']==np.max(temp['ml_mod0p2Z']))])
 
 m_to_lv=m_to_l.values
       
-for a,m in zip(age,m_to_l):
+for a,m in zip(age,m_to_lv):
     mass=m_to_lv*( 10**( -0.4*(data.f606w-DM-M_sun_f606w) ) ) * 1e-6
     k='$M/L_V$ = {:.3g}'.format(m) + "; Age = {:.3g} Gyr".format(a)+'\n$M$ = {:.2f}'.format(mass[0]) + 'x$10^6\ M_\odot$'
 #    data["mass"]=data["mass"].append(k*( 10**( -0.4*(data.f606w-DM-M_sun_f606w) ) ) * 1e-5)
