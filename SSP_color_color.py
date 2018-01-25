@@ -209,8 +209,8 @@ for a,m in zip(age_0p04Z,m_to_lv_0p04Z):
     ax1.annotate(k,xy=(1.6,1))
 
 
-fig.tight_layout()
+plt.tight_layout()
 
-fig.savefig("test.pdf")
+plt.savefig("test.pdf")
 
-fig.show()
+plt.show()
