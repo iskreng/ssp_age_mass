@@ -109,16 +109,64 @@ ax1.yaxis.set_minor_locator(mytics)
 
 ax1.set_xlabel("F606W-F160W [mag]")
 ax1.set_ylabel("F606W-F814W [mag]")
-       
+
+# SSP constant age
+age_low=np.log10(2.99e9); age_up=np.log10(3.01e9)
+m606m160_2Gyr = [ssp_model_0p005Z.loc[((ssp_model_0p005Z['log_age_yr']>=age_low) & (ssp_model_0p005Z['log_age_yr']<=age_up)), '606m160'].values[0],\
+ssp_model_0p02Z.loc[((ssp_model_0p02Z['log_age_yr']>=age_low) & (ssp_model_0p02Z['log_age_yr']<=age_up)), '606m160'].values[0],\
+ssp_model_0p04Z.loc[((ssp_model_0p04Z['log_age_yr']>=age_low) & (ssp_model_0p04Z['log_age_yr']<=age_up)), '606m160'].values[0],\
+ssp_model_0p2Z.loc[((ssp_model_0p2Z['log_age_yr']>=age_low) & (ssp_model_0p2Z['log_age_yr']<=age_up)), '606m160'].values[0],\
+ssp_model_Z.loc[((ssp_model_Z['log_age_yr']>=age_low) & (ssp_model_Z['log_age_yr']<=age_up)), '606m160'].values[0],\
+ssp_model_2p5Z.loc[((ssp_model_2p5Z['log_age_yr']>=age_low) & (ssp_model_2p5Z['log_age_yr']<=age_up)), '606m160'].values[0]]
+m606m814_2Gyr = [ssp_model_0p005Z.loc[((ssp_model_0p005Z['log_age_yr']>=age_low) & (ssp_model_0p005Z['log_age_yr']<=age_up)), '606m814'].values[0],\
+ssp_model_0p02Z.loc[((ssp_model_0p02Z['log_age_yr']>=age_low) & (ssp_model_0p02Z['log_age_yr']<=age_up)), '606m814'].values[0],\
+ssp_model_0p04Z.loc[((ssp_model_0p04Z['log_age_yr']>=age_low) & (ssp_model_0p04Z['log_age_yr']<=age_up)), '606m814'].values[0],\
+ssp_model_0p2Z.loc[((ssp_model_0p2Z['log_age_yr']>=age_low) & (ssp_model_0p2Z['log_age_yr']<=age_up)), '606m814'].values[0],\
+ssp_model_Z.loc[((ssp_model_Z['log_age_yr']>=age_low) & (ssp_model_Z['log_age_yr']<=age_up)), '606m814'].values[0],\
+ssp_model_2p5Z.loc[((ssp_model_2p5Z['log_age_yr']>=age_low) & (ssp_model_2p5Z['log_age_yr']<=age_up)), '606m814'].values[0]]
+
+age_low=np.log10(4.99e9); age_up=np.log10(5.01e9)
+m606m160_5Gyr = [ssp_model_0p005Z.loc[((ssp_model_0p005Z['log_age_yr']>=age_low) & (ssp_model_0p005Z['log_age_yr']<=age_up)), '606m160'].values[0],\
+ssp_model_0p02Z.loc[((ssp_model_0p02Z['log_age_yr']>=age_low) & (ssp_model_0p02Z['log_age_yr']<=age_up)), '606m160'].values[0],\
+ssp_model_0p04Z.loc[((ssp_model_0p04Z['log_age_yr']>=age_low) & (ssp_model_0p04Z['log_age_yr']<=age_up)), '606m160'].values[0],\
+ssp_model_0p2Z.loc[((ssp_model_0p2Z['log_age_yr']>=age_low) & (ssp_model_0p2Z['log_age_yr']<=age_up)), '606m160'].values[0],\
+ssp_model_Z.loc[((ssp_model_Z['log_age_yr']>=age_low) & (ssp_model_Z['log_age_yr']<=age_up)), '606m160'].values[0],\
+ssp_model_2p5Z.loc[((ssp_model_2p5Z['log_age_yr']>=age_low) & (ssp_model_2p5Z['log_age_yr']<=age_up)), '606m160'].values[0]]
+m606m814_5Gyr = [ssp_model_0p005Z.loc[((ssp_model_0p005Z['log_age_yr']>=age_low) & (ssp_model_0p005Z['log_age_yr']<=age_up)), '606m814'].values[0],\
+ssp_model_0p02Z.loc[((ssp_model_0p02Z['log_age_yr']>=age_low) & (ssp_model_0p02Z['log_age_yr']<=age_up)), '606m814'].values[0],\
+ssp_model_0p04Z.loc[((ssp_model_0p04Z['log_age_yr']>=age_low) & (ssp_model_0p04Z['log_age_yr']<=age_up)), '606m814'].values[0],\
+ssp_model_0p2Z.loc[((ssp_model_0p2Z['log_age_yr']>=age_low) & (ssp_model_0p2Z['log_age_yr']<=age_up)), '606m814'].values[0],\
+ssp_model_Z.loc[((ssp_model_Z['log_age_yr']>=age_low) & (ssp_model_Z['log_age_yr']<=age_up)), '606m814'].values[0],\
+ssp_model_2p5Z.loc[((ssp_model_2p5Z['log_age_yr']>=age_low) & (ssp_model_2p5Z['log_age_yr']<=age_up)), '606m814'].values[0]]
+
+age_low=np.log10(13.99e9); age_up=np.log10(14.01e9)
+m606m160_14Gyr = [ssp_model_0p005Z.loc[((ssp_model_0p005Z['log_age_yr']>=age_low) & (ssp_model_0p005Z['log_age_yr']<=age_up)), '606m160'].values[0],\
+ssp_model_0p02Z.loc[((ssp_model_0p02Z['log_age_yr']>=age_low) & (ssp_model_0p02Z['log_age_yr']<=age_up)), '606m160'].values[0],\
+ssp_model_0p04Z.loc[((ssp_model_0p04Z['log_age_yr']>=age_low) & (ssp_model_0p04Z['log_age_yr']<=age_up)), '606m160'].values[0],\
+ssp_model_0p2Z.loc[((ssp_model_0p2Z['log_age_yr']>=age_low) & (ssp_model_0p2Z['log_age_yr']<=age_up)), '606m160'].values[0],\
+ssp_model_Z.loc[((ssp_model_Z['log_age_yr']>=age_low) & (ssp_model_Z['log_age_yr']<=age_up)), '606m160'].values[0],\
+ssp_model_2p5Z.loc[((ssp_model_2p5Z['log_age_yr']>=age_low) & (ssp_model_2p5Z['log_age_yr']<=age_up)), '606m160'].values[0]]
+m606m814_14Gyr = [ssp_model_0p005Z.loc[((ssp_model_0p005Z['log_age_yr']>=age_low) & (ssp_model_0p005Z['log_age_yr']<=age_up)), '606m814'].values[0],\
+ssp_model_0p02Z.loc[((ssp_model_0p02Z['log_age_yr']>=age_low) & (ssp_model_0p02Z['log_age_yr']<=age_up)), '606m814'].values[0],\
+ssp_model_0p04Z.loc[((ssp_model_0p04Z['log_age_yr']>=age_low) & (ssp_model_0p04Z['log_age_yr']<=age_up)), '606m814'].values[0],\
+ssp_model_0p2Z.loc[((ssp_model_0p2Z['log_age_yr']>=age_low) & (ssp_model_0p2Z['log_age_yr']<=age_up)), '606m814'].values[0],\
+ssp_model_Z.loc[((ssp_model_Z['log_age_yr']>=age_low) & (ssp_model_Z['log_age_yr']<=age_up)), '606m814'].values[0],\
+ssp_model_2p5Z.loc[((ssp_model_2p5Z['log_age_yr']>=age_low) & (ssp_model_2p5Z['log_age_yr']<=age_up)), '606m814'].values[0]]
+
+ax1.plot(m606m160_2Gyr,m606m814_2Gyr,linestyle='--',color='gray',zorder=0)
+ax1.plot(m606m160_5Gyr,m606m814_5Gyr,linestyle='--',color='gray',zorder=0)
+ax1.plot(m606m160_14Gyr,m606m814_14Gyr,linestyle='--',color='gray',zorder=0)
+
+ax1.plot(ssp_model_0p005Z['606m160'],ssp_model_0p005Z['606m814'], color='darkblue', linestyle='-', label='0.005Z$_\odot$',zorder=0)
+#ax1.plot(ssp_model_0p02Z['606m160'],ssp_model_0p02Z['606m814'], color='darkblue', linestyle='-', label='0.02Z$_\odot$',zorder=0)
+ax1.plot(ssp_model_0p04Z['606m160'],ssp_model_0p04Z['606m814'], color='blue', linestyle='-', label='0.04Z$_\odot$',zorder=0)
+ax1.plot(ssp_model_0p2Z['606m160'],ssp_model_0p2Z['606m814'], color='darkorange', linestyle='-', label='0.2Z$_\odot$',zorder=0)
 ax1.plot(ssp_model_Z['606m160'],ssp_model_Z['606m814'], color='red', linestyle='-', label='1Z')
-ax1.plot(ssp_model_0p005Z['606m160'],ssp_model_0p005Z['606m814'], color='blue', linestyle='-', label='0.005Z')
-#ax1.plot(ssp_model_0p02Z['606m160'],ssp_model_0p02Z['606m814'], color='darkblue', linestyle='-', label='0.02Z')
-ax1.plot(ssp_model_0p04Z['606m160'],ssp_model_0p04Z['606m814'], color='darkblue', linestyle='-', label='0.04Z')
-ax1.plot(ssp_model_0p2Z['606m160'],ssp_model_0p2Z['606m814'], color='darkorange', linestyle='-', label='0.2Z')
-ax1.plot(ssp_model_2p5Z['606m160'],ssp_model_2p5Z['606m814'], color='brown', linestyle='-', label='2.5Z')
+ax1.plot(ssp_model_2p5Z['606m160'],ssp_model_2p5Z['606m814'], color='brown', linestyle='-', label='2.5Z$_\odot$',zorder=0)
 ax1.errorbar(data.f606w-data.f160w,data.f606w-data.f814w,\
              xerr=np.sqrt(data.f606w_err**2+data.f160w_err**2),\
-             yerr=np.sqrt(data.f606w_err**2+data.f814w_err**2),marker='.')
+             yerr=np.sqrt(data.f606w_err**2+data.f814w_err**2),marker='.',color='gray',zorder=1)
+ax1.plot(data.f606w-data.f160w,data.f606w-data.f814w,marker='o',color='black',zorder=2)
 
 # Estimate the maximum likelihood model value for age and M/Lv
 model=ssp_model_0p2Z
@@ -133,20 +181,21 @@ for col1,col1_err,col2,col2_err,col3,col3_err in zip((data.f606w-data.f160w),np.
         temp = temp.append({'ml_mod0p2Z': c}, ignore_index=True)
 
 model['ml_mod0p2Z']=temp
-age_0p02Z=pd.to_numeric(1e-9*10**(model['log_age_yr'][(model['ml_mod0p2Z']==np.max(temp['ml_mod0p2Z']))]))
-m_to_l_0p02Z=pd.to_numeric(model['M_star_tot_to_Lv'][(model['ml_mod0p2Z']==np.max(temp['ml_mod0p2Z']))])
-m_to_lv_0p02Z=m_to_l_0p02Z.values
-      
+age_0p2Z=(1e-9*10**(model['log_age_yr'][(model['ml_mod0p2Z']==np.max(temp['ml_mod0p2Z']))]))
+m_to_l_0p2Z=(model['M_star_tot_to_Lv'][(model['ml_mod0p2Z']==np.max(temp['ml_mod0p2Z']))])
+age_0p2Z_val=age_0p2Z.values[0]; m_to_lv_0p2Z=m_to_l_0p2Z.values[0]
+
 print(data)
 
 ax1.legend(loc=4,fontsize=10,ncol=2,columnspacing=.5,markerscale=0.28,framealpha=0)
 
-ax2 = fig.add_axes([.6,.71,.395,.27])
-ax2.set_ylabel("Scaled likelihood value")
-#ax2.set_xlim(0,6.8); ax2.set_ylim(0,1.1)
-#sbn.kdeplot(model['ml_mod0p2Z'],bw=0.2,label='0.2Z')
-#ax2.set_xscale("log")
-ax2.plot(1e-9*10**(model['log_age_yr']),1e-5*10**(model['ml_mod0p2Z']),linestyle='-',label='0.2Z')
+ax22 = fig.add_axes([.905,.39,.09,.27])
+sbn.kdeplot(np.e**(model['ml_mod0p2Z']),bw=(.1*np.e**(model['ml_mod0p2Z']).max()/2.),color='darkorange',label='KDE', vertical=True)
+ax22.yaxis.set_visible(False)
+ax22.legend(fontsize=10,ncol=2,columnspacing=.5,markerscale=0.28,framealpha=0)
+ax2 = fig.add_axes([.6,.39,.305,.27])
+ax2.set_ylabel("Likelihood value")
+ax2.plot(1e-9*10**(model['log_age_yr']),np.e**(model['ml_mod0p2Z']),color='darkorange',linestyle='-',label='0.2Z$_\odot$')
 ax2.legend(loc=2,fontsize=10,ncol=2,columnspacing=.5,markerscale=0.28,framealpha=0)
 
 #############
@@ -165,13 +214,15 @@ for col1,col1_err,col2,col2_err,col3,col3_err in zip((data.f606w-data.f160w),np.
 model['ml_modZ']=temp
 age_Z=pd.to_numeric(1e-9*10**(model['log_age_yr'][(model['ml_modZ']==np.max(temp['ml_modZ']))]))
 m_to_l_Z=pd.to_numeric(model['M_star_tot_to_Lv'][(model['ml_modZ']==np.max(temp['ml_modZ']))])
-m_to_lv_Z=m_to_l_Z.values
+m_to_lv_Z=m_to_l_Z.values[0]
 
-ax3 = fig.add_axes([.6,.39,.395,.27])
-ax3.set_ylabel("Scaled likelihood value")
-#ax3.set_xlim(0,6.8); ax3.set_ylim(0,1.1)
-#sbn.kdeplot(model['ml_modZ'],bw=0.2,label='Z')
-ax3.plot(1e-9*10**(model['log_age_yr']),1e-5*10**(model['ml_modZ']),linestyle='-',label='Z')
+ax33 = fig.add_axes([.905,.71,.09,.27])
+sbn.kdeplot(np.e**(model['ml_modZ']),bw=(.1*np.e**(model['ml_modZ']).max()/2.),color='red',label='KDE', vertical=True)
+ax33.yaxis.set_visible(False)
+ax33.legend(fontsize=10,ncol=2,columnspacing=.5,markerscale=0.28,framealpha=0)
+ax3 = fig.add_axes([.6,.71,.305,.27])
+ax3.set_ylabel("Likelihood value")
+ax3.plot(1e-9*10**(model['log_age_yr']),np.e**(model['ml_modZ']),color='red',linestyle='-',label='Z$_\odot$')
 ax3.legend(loc=2,fontsize=10,ncol=2,columnspacing=.5,markerscale=0.28,framealpha=0)
 
 #############
@@ -192,21 +243,20 @@ age_0p04Z=pd.to_numeric(1e-9*10**(model['log_age_yr'][(model['ml_mod0p04Z']==np.
 m_to_l_0p04Z=pd.to_numeric(model['M_star_tot_to_Lv'][(model['ml_mod0p04Z']==np.max(temp['ml_mod0p04Z']))])
 m_to_lv_0p04Z=m_to_l_0p04Z.values
 
-ax4 = fig.add_axes([.6,.07,.395,.27])
-ax4.set_xlabel("Age [Gyr]") ; plt.ylabel("Scaled likelihood value")
-#ax4.set_xlim(0,6.8); ax4.set_ylim(0,1.1)
-#sbn.kdeplot(model['ml_mod0p04Z'],bw=0.2,label='0.02Z')
-ax4.plot(1e-9*10**(model['log_age_yr']),1e-5*10**(model['ml_mod0p04Z']),linestyle='-',label='0.04Z')
+ax44 = fig.add_axes([.905,.07,.09,.27])
+ax44.set_xlabel(r"$\rho_{Likelihood}$")
+sbn.kdeplot(np.e**(model['ml_mod0p04Z']),bw=(.1*np.e**(model['ml_mod0p04Z']).max()/2.),color='blue',label='KDE', vertical=True)
+ax44.yaxis.set_visible(False)
+ax44.legend(fontsize=10,ncol=2,columnspacing=.5,markerscale=0.28,framealpha=0)
+ax4 = fig.add_axes([.6,.07,.305,.27])
+ax4.set_xlabel("Age [Gyr]") ; plt.ylabel("Likelihood value")
+ax4.plot(1e-9*10**(model['log_age_yr']),np.e**(model['ml_mod0p04Z']),color='blue',linestyle='-',label='0.04Z$_\odot$')
 ax4.legend(loc=2,fontsize=10,ncol=2,columnspacing=.5,markerscale=0.28,framealpha=0)
 
 ### Annotate the most likely SSP parameters
-
-for a,m in zip(age_0p02Z,m_to_lv_0p02Z):
-    mass=m_to_lv_0p02Z*( 10**( -0.4*(data.f606w-DM-M_sun_f606w) ) ) * 1e-6
-    k='Z = 0.2Z$_\odot$; Age = {:.3g} Gyr'.format(a)+'; $M/L_V$ = {:.3g}'.format(m)+'\n$M$ = {:.2f}'.format(mass[0]) + 'x$10^6 M_\odot$'
-#    data["mass"]=data["mass"].append(k*( 10**( -0.4*(data.f606w-DM-M_sun_f606w) ) ) * 1e-5)
-#    print(data["mass"])
-    ax1.annotate(k,xy=(1.56,1))
+mass=m_to_lv_0p2Z*( 10**( -0.4*(data.f606w-DM-M_sun_f606w) ) ) * 1e-6
+k='Z = 0.2Z$_\odot$; Age = {:.3g} Gyr'.format(age_0p2Z_val)+'; $M/L_V$ = {:.3g}'.format(m_to_lv_0p2Z)+'\n$M$ = {:.2f}'.format(mass[0]) + 'x$10^6 M_\odot$'
+ax1.annotate(k,xy=(1.56,1))
 
 
 plt.tight_layout()
