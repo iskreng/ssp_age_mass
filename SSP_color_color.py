@@ -1,6 +1,7 @@
 import argparse
 import numpy as np
 import pandas as pd
+import seaborn as sbn
 import matplotlib.pyplot as plt
 from matplotlib.ticker import AutoMinorLocator
 import warnings
@@ -90,7 +91,7 @@ ssp_model_2p5Z['606m814']=ssp_model_2p5Z['V_m_F814w_uvis'][select]-ssp_model_2p5
 ssp_model_2p5Z['606m160']=ssp_model_2p5Z['V_m_F160w_wfc3'][select]-ssp_model_2p5Z['V_m_F606w_uvis'][select]
 
 # Figure formatting entire session
-plt.figure(facecolor='white', figsize=plt.figaspect(0.65)); plt.rcParams["axes.formatter.useoffset"]=False
+plt.rcParams["axes.formatter.useoffset"]=False
 plt.rcParams["font.family"] = "serif"; plt.rcParams["font.size"] = 11
 plt.rcParams["xtick.top"] = True; plt.rcParams["ytick.right"] = True
 plt.rcParams["xtick.major.size"] = 5; plt.rcParams["ytick.major.size"] = 5
@@ -98,23 +99,24 @@ plt.rcParams["xtick.minor.size"] = 2; plt.rcParams["ytick.minor.size"] = 2
 plt.rcParams["xtick.direction"] = "in"; plt.rcParams["ytick.direction"] = "in"
 plt.rcParams["xtick.minor.visible"] = True; plt.rcParams["ytick.minor.visible"] = True
 
+#plt.figure(1,facecolor='white', figsize=plt.figaspect(.65))
+fig = plt.figure(facecolor='white', figsize=(12,6))
+ax1 = fig.add_axes([0.045,0.07,.5,.92])
 mxtics = AutoMinorLocator(4)
 mytics = AutoMinorLocator(4)
-plt.axes().xaxis.set_minor_locator(mxtics)
-plt.axes().yaxis.set_minor_locator(mytics)
+ax1.xaxis.set_minor_locator(mxtics)
+ax1.yaxis.set_minor_locator(mytics)
 
-plt.xlabel("F606W-F160W [mag]")
-plt.ylabel("F606W-F814W [mag]")
-#plt.ylim(0,1.8) # plt.gca().invert_yaxis()
-#plt.xlim(0,2.8)
+ax1.set_xlabel("F606W-F160W [mag]")
+ax1.set_ylabel("F606W-F814W [mag]")
        
-plt.plot(ssp_model_Z['606m160'],ssp_model_Z['606m814'], color='red', linestyle='-', label='1Z')
-plt.plot(ssp_model_0p005Z['606m160'],ssp_model_0p005Z['606m814'], color='blue', linestyle='-', label='0.005Z')
-plt.plot(ssp_model_0p02Z['606m160'],ssp_model_0p02Z['606m814'], color='darkblue', linestyle='-', label='0.02Z')
-#plt.plot(color2_0p04Z,color1_0p04Z, color='royalblue', linestyle='-')
-plt.plot(ssp_model_0p2Z['606m160'],ssp_model_0p2Z['606m814'], color='darkorange', linestyle='-', label='0.2Z')
-plt.plot(ssp_model_2p5Z['606m160'],ssp_model_2p5Z['606m814'], color='brown', linestyle='-', label='2.5Z')
-plt.errorbar(data.f606w-data.f160w,data.f606w-data.f814w,\
+ax1.plot(ssp_model_Z['606m160'],ssp_model_Z['606m814'], color='red', linestyle='-', label='1Z')
+ax1.plot(ssp_model_0p005Z['606m160'],ssp_model_0p005Z['606m814'], color='blue', linestyle='-', label='0.005Z')
+ax1.plot(ssp_model_0p02Z['606m160'],ssp_model_0p02Z['606m814'], color='darkblue', linestyle='-', label='0.02Z')
+#ax1.plot(color2_0p04Z,color1_0p04Z, color='royalblue', linestyle='-')
+ax1.plot(ssp_model_0p2Z['606m160'],ssp_model_0p2Z['606m814'], color='darkorange', linestyle='-', label='0.2Z')
+ax1.plot(ssp_model_2p5Z['606m160'],ssp_model_2p5Z['606m814'], color='brown', linestyle='-', label='2.5Z')
+ax1.errorbar(data.f606w-data.f160w,data.f606w-data.f814w,\
              xerr=np.sqrt(data.f606w_err**2+data.f160w_err**2),\
              yerr=np.sqrt(data.f606w_err**2+data.f814w_err**2),marker='.')
 
@@ -131,24 +133,84 @@ for col1,col1_err,col2,col2_err,col3,col3_err in zip((data.f606w-data.f160w),np.
         temp = temp.append({'ml_mod0p2Z': c}, ignore_index=True)
 
 model['ml_mod0p2Z']=temp
-age=pd.to_numeric(1e-9*10**(model['log_age_yr'][(model['ml_mod0p2Z']==np.max(temp['ml_mod0p2Z']))]))
-m_to_l=pd.to_numeric(model['M_star_tot_to_Lv'][(model['ml_mod0p2Z']==np.max(temp['ml_mod0p2Z']))])
-#m_to_l=pd.to_numeric(model['M_star_liv_to_Lv'][(model['ml_mod0p2Z']==np.max(temp['ml_mod0p2Z']))])
-
-m_to_lv=m_to_l.values
+age_0p02Z=pd.to_numeric(1e-9*10**(model['log_age_yr'][(model['ml_mod0p2Z']==np.max(temp['ml_mod0p2Z']))]))
+m_to_l_0p02Z=pd.to_numeric(model['M_star_tot_to_Lv'][(model['ml_mod0p2Z']==np.max(temp['ml_mod0p2Z']))])
+m_to_lv_0p02Z=m_to_l_0p02Z.values
       
-for a,m in zip(age,m_to_lv):
-    mass=m_to_lv*( 10**( -0.4*(data.f606w-DM-M_sun_f606w) ) ) * 1e-6
-    k='$M/L_V$ = {:.3g}'.format(m) + "; Age = {:.3g} Gyr".format(a)+'\n$M$ = {:.2f}'.format(mass[0]) + 'x$10^6\ M_\odot$'
-#    data["mass"]=data["mass"].append(k*( 10**( -0.4*(data.f606w-DM-M_sun_f606w) ) ) * 1e-5)
-#    print(data["mass"])
-    plt.annotate(k,xy=(1.6,1))
 print(data)
 
-plt.legend(loc=4,fontsize=10,ncol=2,columnspacing=.5,markerscale=0.28,framealpha=0)
+ax1.legend(loc=4,fontsize=10,ncol=2,columnspacing=.5,markerscale=0.28,framealpha=0)
 
-plt.tight_layout()
+ax2 = fig.add_axes([.6,.71,.395,.27])
+ax2.set_ylabel("Scaled likelihood value")
+#ax2.set_xlim(0,6.8); ax2.set_ylim(0,1.1)
+#sbn.kdeplot(model['ml_mod0p2Z'],bw=0.2,label='0.2Z')
+#ax2.set_xscale("log")
+ax2.plot(1e-9*10**(model['log_age_yr']),1e-5*10**(model['ml_mod0p2Z']),linestyle='-',label='0.2Z')
+ax2.legend(loc=2,fontsize=10,ncol=2,columnspacing=.5,markerscale=0.28,framealpha=0)
 
-plt.savefig("test.pdf")
+#############
+del model,temp
+model=ssp_model_Z
+temp = pd.DataFrame(columns=['ml_modZ'])
+for col1,col1_err,col2,col2_err,col3,col3_err in zip((data.f606w-data.f160w),np.sqrt(data.f606w_err**2+data.f160w_err**2),\
+                                       (data.f606w-data.f814w),np.sqrt(data.f606w_err**2+data.f814w_err**2),\
+                                       (data.f814w-data.f160w),np.sqrt(data.f814w_err**2+data.f160w_err**2)):
+    for mod_col1,mod_col2,mod_col3 in zip(model['606m160'],model['606m814'],model['V_m_F160w_wfc3']-model['V_m_F814w_uvis']) :
+        a=(1./(col1_err*np.sqrt(2.*np.pi)))*(1./(col2_err*np.sqrt(2.*np.pi)))*(1./(col3_err*np.sqrt(2.*np.pi)))
+        b=np.exp(-(col1-mod_col1)**2 / (2*col1_err**2))*np.exp(-(col2-mod_col2)**2 / (2*col2_err**2))*np.exp(-(col3-mod_col3)**2 / (2*col3_err**2))
+        c=np.log(a*b)
+        temp = temp.append({'ml_modZ': c}, ignore_index=True)
 
-plt.show()
+model['ml_modZ']=temp
+age_Z=pd.to_numeric(1e-9*10**(model['log_age_yr'][(model['ml_modZ']==np.max(temp['ml_modZ']))]))
+m_to_l_Z=pd.to_numeric(model['M_star_tot_to_Lv'][(model['ml_modZ']==np.max(temp['ml_modZ']))])
+m_to_lv_Z=m_to_l_Z.values
+
+ax3 = fig.add_axes([.6,.39,.395,.27])
+ax3.set_ylabel("Scaled likelihood value")
+#ax3.set_xlim(0,6.8); ax3.set_ylim(0,1.1)
+#sbn.kdeplot(model['ml_modZ'],bw=0.2,label='Z')
+ax3.plot(1e-9*10**(model['log_age_yr']),1e-5*10**(model['ml_modZ']),linestyle='-',label='Z')
+ax3.legend(loc=2,fontsize=10,ncol=2,columnspacing=.5,markerscale=0.28,framealpha=0)
+
+#############
+del model,temp
+model=ssp_model_0p02Z
+temp = pd.DataFrame(columns=['ml_mod0p02Z'])
+for col1,col1_err,col2,col2_err,col3,col3_err in zip((data.f606w-data.f160w),np.sqrt(data.f606w_err**2+data.f160w_err**2),\
+                                       (data.f606w-data.f814w),np.sqrt(data.f606w_err**2+data.f814w_err**2),\
+                                       (data.f814w-data.f160w),np.sqrt(data.f814w_err**2+data.f160w_err**2)):
+    for mod_col1,mod_col2,mod_col3 in zip(model['606m160'],model['606m814'],model['V_m_F160w_wfc3']-model['V_m_F814w_uvis']) :
+        a=(1./(col1_err*np.sqrt(2.*np.pi)))*(1./(col2_err*np.sqrt(2.*np.pi)))*(1./(col3_err*np.sqrt(2.*np.pi)))
+        b=np.exp(-(col1-mod_col1)**2 / (2*col1_err**2))*np.exp(-(col2-mod_col2)**2 / (2*col2_err**2))*np.exp(-(col3-mod_col3)**2 / (2*col3_err**2))
+        c=np.log(a*b)
+        temp = temp.append({'ml_mod0p02Z': c}, ignore_index=True)
+
+model['ml_mod0p02Z']=temp
+age_0p02Z=pd.to_numeric(1e-9*10**(model['log_age_yr'][(model['ml_mod0p02Z']==np.max(temp['ml_mod0p02Z']))]))
+m_to_l_0p02Z=pd.to_numeric(model['M_star_tot_to_Lv'][(model['ml_mod0p02Z']==np.max(temp['ml_mod0p02Z']))])
+m_to_lv_0p02Z=m_to_l_0p02Z.values
+
+ax4 = fig.add_axes([.6,.07,.395,.27])
+ax4.set_xlabel("Age [Gyr]") ; plt.ylabel("Scaled likelihood value")
+#ax4.set_xlim(0,6.8); ax4.set_ylim(0,1.1)
+#sbn.kdeplot(model['ml_mod0p02Z'],bw=0.2,label='0.02Z')
+ax4.plot(1e-9*10**(model['log_age_yr']),1e-5*10**(model['ml_mod0p02Z']),linestyle='-',label='0.02Z')
+ax4.legend(loc=2,fontsize=10,ncol=2,columnspacing=.5,markerscale=0.28,framealpha=0)
+
+### Annotate the most likely SSP parameters
+
+for a,m in zip(age_0p02Z,m_to_lv_0p02Z):
+    mass=m_to_lv_0p02Z*( 10**( -0.4*(data.f606w-DM-M_sun_f606w) ) ) * 1e-6
+    k='$M/L_V$ = {:.3g}'.format(m) + "; Age = {:.3g} Gyr".format(a)+'\n$M$ = {:.2f}'.format(mass[0]) + 'x$10^6 M_\odot$'
+#    data["mass"]=data["mass"].append(k*( 10**( -0.4*(data.f606w-DM-M_sun_f606w) ) ) * 1e-5)
+#    print(data["mass"])
+    ax1.annotate(k,xy=(1.6,1))
+
+
+fig.tight_layout()
+
+fig.savefig("test.pdf")
+
+fig.show()
