@@ -17,11 +17,11 @@ data=pd.DataFrame({'f606w' : [25.09],\
                    'f160w' : [22.8],\
                    'f160w_err' : [0.05]})
                       
-ssp_model_file_Z="bc03/cb07_12/cb07_hr_stelib_m62_kroup_ssp_colnm.dat"
 ssp_model_file_0p005Z="bc03/cb07_12/cb07_hr_stelib_m22_kroup_ssp_colnm.dat"
-ssp_model_file_0p04Z="bc03/cb07_12/cb07_hr_stelib_m32_kroup_ssp_colnm.dat"
-ssp_model_file_0p02Z="bc03/cb07_12/cb07_hr_stelib_m42_kroup_ssp_colnm.dat"
+ssp_model_file_0p02Z="bc03/cb07_12/cb07_hr_stelib_m32_kroup_ssp_colnm.dat"
+ssp_model_file_0p04Z="bc03/cb07_12/cb07_hr_stelib_m42_kroup_ssp_colnm.dat"
 ssp_model_file_0p2Z="bc03/cb07_12/cb07_hr_stelib_m52_kroup_ssp_colnm.dat"
+ssp_model_file_Z="bc03/cb07_12/cb07_hr_stelib_m62_kroup_ssp_colnm.dat"
 ssp_model_file_2p5Z="bc03/cb07_12/cb07_hr_stelib_m72_kroup_ssp_colnm.dat"
 
 lg_age_limit=9.3
@@ -54,10 +54,7 @@ if input.m160 :
     ssp_lum_scale=input.ssp_lum_scale
 
 ##### END: User input #####
-print("SSP for Age > {:.2f}".format(1e-9*10**(lg_age_limit)))
 
-ssp_model_Z = pd.read_table(ssp_model_file_Z, delim_whitespace=True, engine='c', na_values='INDEF',
-                              header=None, comment='#', names=['log_age_yr','Vmag','M_star_tot_to_Lv', 'M_star_liv_to_Lv','V_m_F160w_wfc3', 'V_m_F606w_uvis', 'V_m_F814w_uvis'], usecols=[0,13,58,61,95,109,114])
 ssp_model_0p005Z = pd.read_table(ssp_model_file_0p005Z, delim_whitespace=True, engine='c', na_values='INDEF',
                               header=None, comment='#', names=['log_age_yr','Vmag','M_star_tot_to_Lv', 'M_star_liv_to_Lv','V_m_F160w_wfc3', 'V_m_F606w_uvis', 'V_m_F814w_uvis'], usecols=[0,13,58,61,95,109,114])
 ssp_model_0p02Z = pd.read_table(ssp_model_file_0p02Z, delim_whitespace=True, engine='c', na_values='INDEF',
@@ -66,9 +63,12 @@ ssp_model_0p04Z = pd.read_table(ssp_model_file_0p04Z, delim_whitespace=True, eng
                               header=None, comment='#', names=['log_age_yr','Vmag','M_star_tot_to_Lv', 'M_star_liv_to_Lv','V_m_F160w_wfc3', 'V_m_F606w_uvis', 'V_m_F814w_uvis'], usecols=[0,13,58,61,95,109,114])
 ssp_model_0p2Z = pd.read_table(ssp_model_file_0p2Z, delim_whitespace=True, engine='c', na_values='INDEF',
                               header=None, comment='#', names=['log_age_yr','Vmag','M_star_tot_to_Lv', 'M_star_liv_to_Lv','V_m_F160w_wfc3', 'V_m_F606w_uvis', 'V_m_F814w_uvis'], usecols=[0,13,58,61,95,109,114])
+ssp_model_Z = pd.read_table(ssp_model_file_Z, delim_whitespace=True, engine='c', na_values='INDEF',
+                              header=None, comment='#', names=['log_age_yr','Vmag','M_star_tot_to_Lv', 'M_star_liv_to_Lv','V_m_F160w_wfc3', 'V_m_F606w_uvis', 'V_m_F814w_uvis'], usecols=[0,13,58,61,95,109,114])
 ssp_model_2p5Z = pd.read_table(ssp_model_file_2p5Z, delim_whitespace=True, engine='c', na_values='INDEF',
                               header=None, comment='#', names=['log_age_yr','Vmag','M_star_tot_to_Lv', 'M_star_liv_to_Lv','V_m_F160w_wfc3', 'V_m_F606w_uvis', 'V_m_F814w_uvis'], usecols=[0,13,58,61,95,109,114])
 
+print("SSP for Age > {:.2f}".format(1e-9*10**(lg_age_limit)))
 select=ssp_model_Z['log_age_yr']>=lg_age_limit; select=ssp_model_0p005Z['log_age_yr']>=lg_age_limit; select=ssp_model_2p5Z['log_age_yr']>=lg_age_limit; 
 
 ssp_model_Z['mag_Z']=ssp_model_Z['Vmag'][select]-ssp_model_Z['V_m_F606w_uvis'][select] - 2.5*np.log10(8.55e1*ssp_lum_scale/(ssp_model_Z['M_star_tot_to_Lv'][select])) +DM
@@ -112,8 +112,8 @@ ax1.set_ylabel("F606W-F814W [mag]")
        
 ax1.plot(ssp_model_Z['606m160'],ssp_model_Z['606m814'], color='red', linestyle='-', label='1Z')
 ax1.plot(ssp_model_0p005Z['606m160'],ssp_model_0p005Z['606m814'], color='blue', linestyle='-', label='0.005Z')
-ax1.plot(ssp_model_0p02Z['606m160'],ssp_model_0p02Z['606m814'], color='darkblue', linestyle='-', label='0.02Z')
-#ax1.plot(color2_0p04Z,color1_0p04Z, color='royalblue', linestyle='-')
+#ax1.plot(ssp_model_0p02Z['606m160'],ssp_model_0p02Z['606m814'], color='darkblue', linestyle='-', label='0.02Z')
+ax1.plot(ssp_model_0p04Z['606m160'],ssp_model_0p04Z['606m814'], color='darkblue', linestyle='-', label='0.04Z')
 ax1.plot(ssp_model_0p2Z['606m160'],ssp_model_0p2Z['606m814'], color='darkorange', linestyle='-', label='0.2Z')
 ax1.plot(ssp_model_2p5Z['606m160'],ssp_model_2p5Z['606m814'], color='brown', linestyle='-', label='2.5Z')
 ax1.errorbar(data.f606w-data.f160w,data.f606w-data.f814w,\
@@ -176,8 +176,8 @@ ax3.legend(loc=2,fontsize=10,ncol=2,columnspacing=.5,markerscale=0.28,framealpha
 
 #############
 del model,temp
-model=ssp_model_0p02Z
-temp = pd.DataFrame(columns=['ml_mod0p02Z'])
+model=ssp_model_0p04Z
+temp = pd.DataFrame(columns=['ml_mod0p04Z'])
 for col1,col1_err,col2,col2_err,col3,col3_err in zip((data.f606w-data.f160w),np.sqrt(data.f606w_err**2+data.f160w_err**2),\
                                        (data.f606w-data.f814w),np.sqrt(data.f606w_err**2+data.f814w_err**2),\
                                        (data.f814w-data.f160w),np.sqrt(data.f814w_err**2+data.f160w_err**2)):
@@ -185,24 +185,24 @@ for col1,col1_err,col2,col2_err,col3,col3_err in zip((data.f606w-data.f160w),np.
         a=(1./(col1_err*np.sqrt(2.*np.pi)))*(1./(col2_err*np.sqrt(2.*np.pi)))*(1./(col3_err*np.sqrt(2.*np.pi)))
         b=np.exp(-(col1-mod_col1)**2 / (2*col1_err**2))*np.exp(-(col2-mod_col2)**2 / (2*col2_err**2))*np.exp(-(col3-mod_col3)**2 / (2*col3_err**2))
         c=np.log(a*b)
-        temp = temp.append({'ml_mod0p02Z': c}, ignore_index=True)
+        temp = temp.append({'ml_mod0p04Z': c}, ignore_index=True)
 
-model['ml_mod0p02Z']=temp
-age_0p02Z=pd.to_numeric(1e-9*10**(model['log_age_yr'][(model['ml_mod0p02Z']==np.max(temp['ml_mod0p02Z']))]))
-m_to_l_0p02Z=pd.to_numeric(model['M_star_tot_to_Lv'][(model['ml_mod0p02Z']==np.max(temp['ml_mod0p02Z']))])
-m_to_lv_0p02Z=m_to_l_0p02Z.values
+model['ml_mod0p04Z']=temp
+age_0p04Z=pd.to_numeric(1e-9*10**(model['log_age_yr'][(model['ml_mod0p04Z']==np.max(temp['ml_mod0p04Z']))]))
+m_to_l_0p04Z=pd.to_numeric(model['M_star_tot_to_Lv'][(model['ml_mod0p04Z']==np.max(temp['ml_mod0p04Z']))])
+m_to_lv_0p04Z=m_to_l_0p04Z.values
 
 ax4 = fig.add_axes([.6,.07,.395,.27])
 ax4.set_xlabel("Age [Gyr]") ; plt.ylabel("Scaled likelihood value")
 #ax4.set_xlim(0,6.8); ax4.set_ylim(0,1.1)
-#sbn.kdeplot(model['ml_mod0p02Z'],bw=0.2,label='0.02Z')
-ax4.plot(1e-9*10**(model['log_age_yr']),1e-5*10**(model['ml_mod0p02Z']),linestyle='-',label='0.02Z')
+#sbn.kdeplot(model['ml_mod0p04Z'],bw=0.2,label='0.02Z')
+ax4.plot(1e-9*10**(model['log_age_yr']),1e-5*10**(model['ml_mod0p04Z']),linestyle='-',label='0.04Z')
 ax4.legend(loc=2,fontsize=10,ncol=2,columnspacing=.5,markerscale=0.28,framealpha=0)
 
 ### Annotate the most likely SSP parameters
 
-for a,m in zip(age_0p02Z,m_to_lv_0p02Z):
-    mass=m_to_lv_0p02Z*( 10**( -0.4*(data.f606w-DM-M_sun_f606w) ) ) * 1e-6
+for a,m in zip(age_0p04Z,m_to_lv_0p04Z):
+    mass=m_to_lv_0p04Z*( 10**( -0.4*(data.f606w-DM-M_sun_f606w) ) ) * 1e-6
     k='$M/L_V$ = {:.3g}'.format(m) + "; Age = {:.3g} Gyr".format(a)+'\n$M$ = {:.2f}'.format(mass[0]) + 'x$10^6 M_\odot$'
 #    data["mass"]=data["mass"].append(k*( 10**( -0.4*(data.f606w-DM-M_sun_f606w) ) ) * 1e-5)
 #    print(data["mass"])
