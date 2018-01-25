@@ -69,26 +69,31 @@ ssp_model_2p5Z = pd.read_table(ssp_model_file_2p5Z, delim_whitespace=True, engin
                               header=None, comment='#', names=['log_age_yr','Vmag','M_star_tot_to_Lv', 'M_star_liv_to_Lv','V_m_F160w_wfc3', 'V_m_F606w_uvis', 'V_m_F814w_uvis'], usecols=[0,13,58,61,95,109,114])
 
 print("SSP for Age > {:.2f}".format(1e-9*10**(lg_age_limit)))
-select=ssp_model_Z['log_age_yr']>=lg_age_limit; select=ssp_model_0p005Z['log_age_yr']>=lg_age_limit; select=ssp_model_2p5Z['log_age_yr']>=lg_age_limit; 
+select_0p005Z=ssp_model_0p005Z['log_age_yr']>=lg_age_limit
+select_0p02Z=ssp_model_0p02Z['log_age_yr']>=lg_age_limit
+select_0p04Z=ssp_model_0p04Z['log_age_yr']>=lg_age_limit
+select_0p2Z=ssp_model_0p2Z['log_age_yr']>=lg_age_limit
+select_Z=ssp_model_Z['log_age_yr']>=lg_age_limit
+select_2p5Z=ssp_model_2p5Z['log_age_yr']>=lg_age_limit
 
-ssp_model_Z['mag_Z']=ssp_model_Z['Vmag'][select]-ssp_model_Z['V_m_F606w_uvis'][select] - 2.5*np.log10(8.55e1*ssp_lum_scale/(ssp_model_Z['M_star_tot_to_Lv'][select])) +DM
-ssp_model_Z['606m814']=ssp_model_Z['V_m_F814w_uvis'][select]-ssp_model_Z['V_m_F606w_uvis'][select]
-ssp_model_Z['606m160']=ssp_model_Z['V_m_F160w_wfc3'][select]-ssp_model_Z['V_m_F606w_uvis'][select]
-mag_0p005Z=ssp_model_0p005Z['Vmag'][select]-ssp_model_0p005Z['V_m_F606w_uvis'][select] - 2.5*np.log10(8.55e1*ssp_lum_scale/(ssp_model_0p005Z['M_star_tot_to_Lv'][select]))+DM
-ssp_model_0p005Z['606m814']=ssp_model_0p005Z['V_m_F814w_uvis'][select]-ssp_model_0p005Z['V_m_F606w_uvis'][select]
-ssp_model_0p005Z['606m160']=ssp_model_0p005Z['V_m_F160w_wfc3'][select]-ssp_model_0p005Z['V_m_F606w_uvis'][select]
-mag_0p02Z=ssp_model_0p02Z['Vmag'][select]-ssp_model_0p02Z['V_m_F606w_uvis'][select] - 2.5*np.log10(8.55e1*ssp_lum_scale/(ssp_model_0p02Z['M_star_tot_to_Lv'][select]))+DM
-ssp_model_0p02Z['606m814']=ssp_model_0p02Z['V_m_F814w_uvis'][select]-ssp_model_0p02Z['V_m_F606w_uvis'][select]
-ssp_model_0p02Z['606m160']=ssp_model_0p02Z['V_m_F160w_wfc3'][select]-ssp_model_0p02Z['V_m_F606w_uvis'][select]
-mag_0p04Z=ssp_model_0p04Z['Vmag'][select]-ssp_model_0p04Z['V_m_F606w_uvis'][select] - 2.5*np.log10(8.55e1*ssp_lum_scale/(ssp_model_0p04Z['M_star_tot_to_Lv'][select]))+DM
-ssp_model_0p04Z['606m814']=ssp_model_0p04Z['V_m_F814w_uvis'][select]-ssp_model_0p04Z['V_m_F606w_uvis'][select]
-ssp_model_0p04Z['606m160']=ssp_model_0p04Z['V_m_F160w_wfc3'][select]-ssp_model_0p04Z['V_m_F606w_uvis'][select]
-mag_0p2Z=ssp_model_0p2Z['Vmag'][select]-ssp_model_0p2Z['V_m_F606w_uvis'][select] - 2.5*np.log10(8.55e1*ssp_lum_scale/(ssp_model_0p2Z['M_star_tot_to_Lv'][select]))+DM
-ssp_model_0p2Z['606m814']=ssp_model_0p2Z['V_m_F814w_uvis'][select]-ssp_model_0p2Z['V_m_F606w_uvis'][select]
-ssp_model_0p2Z['606m160']=ssp_model_0p2Z['V_m_F160w_wfc3'][select]-ssp_model_0p2Z['V_m_F606w_uvis'][select]
-mag_2p5Z=ssp_model_2p5Z['Vmag'][select]-ssp_model_2p5Z['V_m_F606w_uvis'][select] - 2.5*np.log10(8.55e1*ssp_lum_scale/(ssp_model_2p5Z['M_star_tot_to_Lv'][select]))+DM
-ssp_model_2p5Z['606m814']=ssp_model_2p5Z['V_m_F814w_uvis'][select]-ssp_model_2p5Z['V_m_F606w_uvis'][select]
-ssp_model_2p5Z['606m160']=ssp_model_2p5Z['V_m_F160w_wfc3'][select]-ssp_model_2p5Z['V_m_F606w_uvis'][select]
+mag_0p005Z=ssp_model_0p005Z['Vmag'][select_0p005Z]-ssp_model_0p005Z['V_m_F606w_uvis'][select_0p005Z] - 2.5*np.log10(8.55e1*ssp_lum_scale/(ssp_model_0p005Z['M_star_tot_to_Lv'][select_0p005Z]))+DM
+ssp_model_0p005Z['606m814']=ssp_model_0p005Z['V_m_F814w_uvis'][select_0p005Z]-ssp_model_0p005Z['V_m_F606w_uvis'][select_0p005Z]
+ssp_model_0p005Z['606m160']=ssp_model_0p005Z['V_m_F160w_wfc3'][select_0p005Z]-ssp_model_0p005Z['V_m_F606w_uvis'][select_0p005Z]
+mag_0p02Z=ssp_model_0p02Z['Vmag'][select_0p02Z]-ssp_model_0p02Z['V_m_F606w_uvis'][select_0p02Z] - 2.5*np.log10(8.55e1*ssp_lum_scale/(ssp_model_0p02Z['M_star_tot_to_Lv'][select_0p02Z]))+DM
+ssp_model_0p02Z['606m814']=ssp_model_0p02Z['V_m_F814w_uvis'][select_0p02Z]-ssp_model_0p02Z['V_m_F606w_uvis'][select_0p02Z]
+ssp_model_0p02Z['606m160']=ssp_model_0p02Z['V_m_F160w_wfc3'][select_0p02Z]-ssp_model_0p02Z['V_m_F606w_uvis'][select_0p02Z]
+mag_0p04Z=ssp_model_0p04Z['Vmag'][select_0p04Z]-ssp_model_0p04Z['V_m_F606w_uvis'][select_0p04Z] - 2.5*np.log10(8.55e1*ssp_lum_scale/(ssp_model_0p04Z['M_star_tot_to_Lv'][select_0p04Z]))+DM
+ssp_model_0p04Z['606m814']=ssp_model_0p04Z['V_m_F814w_uvis'][select_0p04Z]-ssp_model_0p04Z['V_m_F606w_uvis'][select_0p04Z]
+ssp_model_0p04Z['606m160']=ssp_model_0p04Z['V_m_F160w_wfc3'][select_0p04Z]-ssp_model_0p04Z['V_m_F606w_uvis'][select_0p04Z]
+mag_0p2Z=ssp_model_0p2Z['Vmag'][select_0p2Z]-ssp_model_0p2Z['V_m_F606w_uvis'][select_0p2Z] - 2.5*np.log10(8.55e1*ssp_lum_scale/(ssp_model_0p2Z['M_star_tot_to_Lv'][select_0p2Z]))+DM
+ssp_model_0p2Z['606m814']=ssp_model_0p2Z['V_m_F814w_uvis'][select_0p2Z]-ssp_model_0p2Z['V_m_F606w_uvis'][select_0p2Z]
+ssp_model_0p2Z['606m160']=ssp_model_0p2Z['V_m_F160w_wfc3'][select_0p2Z]-ssp_model_0p2Z['V_m_F606w_uvis'][select_0p2Z]
+ssp_model_Z['mag_Z']=ssp_model_Z['Vmag'][select_Z]-ssp_model_Z['V_m_F606w_uvis'][select_Z] - 2.5*np.log10(8.55e1*ssp_lum_scale/(ssp_model_Z['M_star_tot_to_Lv'][select_Z])) +DM
+ssp_model_Z['606m814']=ssp_model_Z['V_m_F814w_uvis'][select_Z]-ssp_model_Z['V_m_F606w_uvis'][select_Z]
+ssp_model_Z['606m160']=ssp_model_Z['V_m_F160w_wfc3'][select_Z]-ssp_model_Z['V_m_F606w_uvis'][select_Z]
+mag_2p5Z=ssp_model_2p5Z['Vmag'][select_2p5Z]-ssp_model_2p5Z['V_m_F606w_uvis'][select_2p5Z] - 2.5*np.log10(8.55e1*ssp_lum_scale/(ssp_model_2p5Z['M_star_tot_to_Lv'][select_2p5Z]))+DM
+ssp_model_2p5Z['606m814']=ssp_model_2p5Z['V_m_F814w_uvis'][select_2p5Z]-ssp_model_2p5Z['V_m_F606w_uvis'][select_2p5Z]
+ssp_model_2p5Z['606m160']=ssp_model_2p5Z['V_m_F160w_wfc3'][select_2p5Z]-ssp_model_2p5Z['V_m_F606w_uvis'][select_2p5Z]
 
 # Figure formatting entire session
 plt.rcParams["axes.formatter.useoffset"]=False
