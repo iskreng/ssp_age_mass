@@ -201,12 +201,12 @@ ax4.legend(loc=2,fontsize=10,ncol=2,columnspacing=.5,markerscale=0.28,framealpha
 
 ### Annotate the most likely SSP parameters
 
-for a,m in zip(age_0p04Z,m_to_lv_0p04Z):
-    mass=m_to_lv_0p04Z*( 10**( -0.4*(data.f606w-DM-M_sun_f606w) ) ) * 1e-6
-    k='$M/L_V$ = {:.3g}'.format(m) + "; Age = {:.3g} Gyr".format(a)+'\n$M$ = {:.2f}'.format(mass[0]) + 'x$10^6 M_\odot$'
+for a,m in zip(age_0p02Z,m_to_lv_0p02Z):
+    mass=m_to_lv_0p02Z*( 10**( -0.4*(data.f606w-DM-M_sun_f606w) ) ) * 1e-6
+    k='Z = 0.2Z$_\odot$; Age = {:.3g} Gyr'.format(a)+'; $M/L_V$ = {:.3g}'.format(m)+'\n$M$ = {:.2f}'.format(mass[0]) + 'x$10^6 M_\odot$'
 #    data["mass"]=data["mass"].append(k*( 10**( -0.4*(data.f606w-DM-M_sun_f606w) ) ) * 1e-5)
 #    print(data["mass"])
-    ax1.annotate(k,xy=(1.6,1))
+    ax1.annotate(k,xy=(1.56,1))
 
 
 plt.tight_layout()
