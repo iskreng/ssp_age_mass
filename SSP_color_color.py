@@ -187,8 +187,8 @@ for col1,col1_err,col2,col2_err,col3,col3_err in zip((data.f606w-data.f160w),np.
 
 # Remove inf and nans
 all_inf_or_nan = temp.isin([np.inf, -np.inf, np.nan]).all(axis='columns')
-temp[~all_inf_or_nan]
-model['ml_mod0p2Z']=temp[temp.replace([np.inf, -np.inf], np.nan).notnull().all(axis=1)]
+model['ml_mod0p2Z']=temp
+model=model[~all_inf_or_nan]
 age_0p2Z=(1e-9*10**(model['log_age_yr'][(model['ml_mod0p2Z']==np.max(temp['ml_mod0p2Z']))]))
 m_to_l_0p2Z=(model['M_star_tot_to_Lv'][(model['ml_mod0p2Z']==np.max(temp['ml_mod0p2Z']))])
 age_0p2Z_val=age_0p2Z.values[0]; m_to_lv_0p2Z=m_to_l_0p2Z.values[0]
@@ -220,8 +220,8 @@ for col1,col1_err,col2,col2_err,col3,col3_err in zip((data.f606w-data.f160w),np.
         temp = temp.append({'ml_modZ': c}, ignore_index=True)
 
 all_inf_or_nan = temp.isin([np.inf, -np.inf, np.nan]).all(axis='columns')
-temp[~all_inf_or_nan]
-model['ml_modZ']=temp[temp.replace([np.inf, -np.inf], np.nan).notnull().all(axis=1)]
+model['ml_modZ']=temp
+model=model[~all_inf_or_nan]
 age_Z=pd.to_numeric(1e-9*10**(model['log_age_yr'][(model['ml_modZ']==np.max(temp['ml_modZ']))]))
 m_to_l_Z=pd.to_numeric(model['M_star_tot_to_Lv'][(model['ml_modZ']==np.max(temp['ml_modZ']))])
 m_to_lv_Z=m_to_l_Z.values[0]
@@ -249,7 +249,8 @@ for col1,col1_err,col2,col2_err,col3,col3_err in zip((data.f606w-data.f160w),np.
         temp = temp.append({'ml_mod0p04Z': c}, ignore_index=True)
 
 all_inf_or_nan = temp.isin([np.inf, -np.inf, np.nan]).all(axis='columns')
-temp[~all_inf_or_nan]
+model['ml_mod0p04Z']=temp
+model=model[~all_inf_or_nan]
 model['ml_mod0p04Z']=temp[temp.replace([np.inf, -np.inf], np.nan).notnull().all(axis=1)]
 age_0p04Z=pd.to_numeric(1e-9*10**(model['log_age_yr'][(model['ml_mod0p04Z']==np.max(temp['ml_mod0p04Z']))]))
 m_to_l_0p04Z=pd.to_numeric(model['M_star_tot_to_Lv'][(model['ml_mod0p04Z']==np.max(temp['ml_mod0p04Z']))])
