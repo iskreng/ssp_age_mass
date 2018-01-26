@@ -248,6 +248,7 @@ for col1,col1_err,col2,col2_err,col3,col3_err in zip((data.f606w-data.f160w),np.
         c=np.log(a*b)
         temp = temp.append({'ml_mod0p04Z': c}, ignore_index=True)
 
+# Remove inf and nans
 all_inf_or_nan = temp.isin([np.inf, -np.inf, np.nan]).all(axis='columns')
 model['ml_mod0p04Z']=temp
 model=model[~all_inf_or_nan]
