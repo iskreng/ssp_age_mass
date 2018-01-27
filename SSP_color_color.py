@@ -183,6 +183,8 @@ age_0p2Z=(1e-9*10**(ssp_model_0p2Z['log_age_yr'][(ssp_model_0p2Z['ml_mod0p2Z']==
 m_to_l_0p2Z=(ssp_model_0p2Z['M_star_tot_to_Lv'][(ssp_model_0p2Z['ml_mod0p2Z']==np.max(ssp_model_0p2Z['ml_mod0p2Z']))])
 age_0p2Z_val=age_0p2Z.values[0]; m_to_lv_0p2Z=m_to_l_0p2Z.values[0]
 
+print('{:.3f}'.format((ssp_model_0p2Z['log_age_yr']*ssp_model_0p2Z['ml_mod0p2Z']).sum() / ssp_model_0p2Z['ml_mod0p2Z'].sum()))
+
 ### Annotate the most likely SSP parameters
 mass=m_to_lv_0p2Z*( 10**( -0.4*(data.f606w-DM-M_sun_f606w) ) ) * 1e-6
 k='Z = 0.2Z$_\odot$; Age = {:.3g} Gyr'.format(age_0p2Z_val)+'; $M/L_V$ = {:.3g}'.format(m_to_lv_0p2Z)+'\n$M$ = {:.2f}'.format(mass[0]) + 'x$10^6 M_\odot$'
