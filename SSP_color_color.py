@@ -292,7 +292,8 @@ ax2.legend(loc=2,fontsize=10,ncol=2,columnspacing=.5,markerscale=0.28,framealpha
 #m_to_lv_Z=m_to_l_Z.values[0]
 
 ax33 = fig.add_axes([.905,.71,.09,.27])
-sbn.kdeplot(np.e**(ssp_model_Z['ml_modZ']),bw=(.1*np.e**(ssp_model_Z['ml_modZ']).max()/2.),color='red',label='KDE', vertical=True)
+#sbn.kdeplot(np.e**(ssp_model_Z['ml_modZ']),bw=(.1*np.e**(ssp_model_Z['ml_modZ']).max()/2.),color='red',label='KDE', vertical=True)
+ax33.plot(ssp_model_0p2Z['M_star_tot_to_Lv'],np.exp(ssp_model_Z['ml_modZ']),linestyle='--',color='darkorange')
 ax33.yaxis.set_visible(False)
 ax33.legend(fontsize=10,ncol=2,columnspacing=.5,markerscale=0.28,framealpha=0)
 ax3 = fig.add_axes([.6,.71,.305,.27])
@@ -303,7 +304,8 @@ ax3.legend(loc=2,fontsize=10,ncol=2,columnspacing=.5,markerscale=0.28,framealpha
 
 ax44 = fig.add_axes([.905,.07,.09,.27])
 ax44.set_xlabel(r"$\rho_{Likelihood}$")
-sbn.kdeplot(np.e**(ssp_model_0p04Z['ml_mod0p04Z']),bw=(.1*np.e**(ssp_model_0p04Z['ml_mod0p04Z']).max()/2.),color='blue',label='KDE', vertical=True)
+#sbn.kdeplot(np.e**(ssp_model_0p04Z['ml_mod0p04Z']),bw=(.1*np.e**(ssp_model_0p04Z['ml_mod0p04Z']).max()/2.),color='blue',label='KDE', vertical=True)
+ax44.plot(ssp_model_0p2Z['M_star_tot_to_Lv'],np.exp(ssp_model_0p04Z['ml_mod0p04Z']),linestyle='--',color='darkorange')
 ax44.yaxis.set_visible(False)
 ax44.legend(fontsize=10,ncol=2,columnspacing=.5,markerscale=0.28,framealpha=0)
 ax4 = fig.add_axes([.6,.07,.305,.27])
