@@ -180,6 +180,8 @@ in zip([ssp_model_0p005Z,ssp_model_0p02Z,ssp_model_0p04Z,ssp_model_0p2Z,ssp_mode
             c=np.log(a*b)
             temp = temp.append({likelihood_column_name: c}, ignore_index=True)
     ssp_model[likelihood_column_name]=temp; del temp
+    all_inf_or_nan = ssp_model.isin([np.inf, -np.inf, np.nan]).all(axis='columns')
+    ssp_model=ssp_model[~all_inf_or_nan]
 
 max_ml=ssp_model_0p2Z['ml_mod0p2Z'].max() ; data['max_ml_0p2Z']=data['f606w']*0. + max_ml
 ml_age=((ssp_model_0p2Z['log_age_yr'][ssp_model_0p2Z['ml_mod0p2Z']==max_ml])).max(); data['ml_age_0p2Z']=data['f606w']*0 + ml_age
