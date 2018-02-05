@@ -9,14 +9,23 @@ warnings.filterwarnings('ignore')
 
 ##### BEGIN: User input #####
 
-data_file="Galaxy_NSCs_1Z.dat"
+
 data=pd.DataFrame({'f606w' : [25.09],\
                    'f606w_err' : [0.03],\
                    'f814w' : [24.2],\
                    'f814w_err' : [0.04],\
                    'f160w' : [22.8],\
                    'f160w_err' : [0.05]})
-                      
+data_file="Galaxy_NSCs_1Z.dat"
+data_file="test0.dat"
+
+data_phot=pd.read_table(data_file, delim_whitespace=True, engine='c', na_values='INDEF',\
+                                  header=None, comment='#', names=['f160w	','f160w_err','f606w','f606w_err','f814w','f814w_err'], usecols=[0,1,2,3,4,5])
+data_phot.head()
+#for data_160,data_160_err,data_606,data_606_err,data_814,data_814_err in data_phot.iterrows():
+##    data=pd.DataFrame({'f606w' : [data_606],'f606w_err' : [data_606_err],'f814w' : [data_814],'f814w_err' : [data_814_err],'f160w' : [data_160],'f160w_err' : [data_160_err]})
+#    print(data_160,data_160_err,data_606,data_606_err,data_814,data_814_err)
+    
 ssp_model_file_0p005Z="bc03/cb07_12/cb07_hr_stelib_m22_kroup_ssp_colnm.dat"
 ssp_model_file_0p02Z="bc03/cb07_12/cb07_hr_stelib_m32_kroup_ssp_colnm.dat"
 ssp_model_file_0p04Z="bc03/cb07_12/cb07_hr_stelib_m42_kroup_ssp_colnm.dat"
