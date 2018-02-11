@@ -63,6 +63,7 @@ ssp_model_2p5Z=ssp_model_2p5Z[(ssp_model_2p5Z['log_age_yr']>=lg_age_limit) & (ss
 #####   DATA    #############
 
 if example==True:
+    # Example data
     data_phot=pd.DataFrame({'f606w' : [25.1],\
                        'f606w_err' : [0.03],\
                        'f814w' : [24.19],\
@@ -111,8 +112,6 @@ else:
     data_file="match_phot_with_cat"
     data_file="selGC_candidates"
     
-    #data_phot=pd.read_table(data_file, delim_whitespace=True, engine='c', na_values='INDEF',\
-    #                                  header=None, skiprows=1, comment='#', names=['f606w','f606w_err','f814w','f814w_err','f160w	','f160w_err'], usecols=[0,1,2,3,4,5])
     data_phot0=pd.read_table(data_file, delim_whitespace=True, engine='c', na_values='nan',\
                                       header=None, comment='#', names=['f160w','f160w_err','f606w','f606w_err','f814w','f814w_err','cat'], usecols=[18,19,20,21,22,23,24])
     data_phot=data_phot0[(data_phot0.f606w-data_phot0.f160w<=3.) & (data_phot0.f606w-data_phot0.f160w>=1.5)\
@@ -206,7 +205,7 @@ for row in data_phot.itertuples():
 #        ax1.plot(m814m160_14Gyr,m606m814_14Gyr,linestyle='--',color='gray',zorder=0)
         
         ax1.plot(ssp_model_0p005Z['606m160'],ssp_model_0p005Z['606m814'], color='darkblue', linestyle='-', label='0.005Z$_\odot$',zorder=0)
-        #ax1.plot(ssp_model_0p02Z['606m160'],ssp_model_0p02Z['606m814'], color='darkblue', linestyle='-', label='0.02Z$_\odot$',zorder=0)
+        #ax1.plot(ssp_model_0p02Z['606m160'],ssp_model_0p02Z['606m814'], color='lightblue', linestyle='-', label='0.02Z$_\odot$',zorder=0)
         ax1.plot(ssp_model_0p04Z['606m160'],ssp_model_0p04Z['606m814'], color='blue', linestyle='-', label='0.04Z$_\odot$',zorder=0)
         ax1.plot(ssp_model_0p2Z['606m160'],ssp_model_0p2Z['606m814'], color='darkorange', linestyle='-', label='0.2Z$_\odot$',zorder=0)
         ax1.plot(ssp_model_Z['606m160'],ssp_model_Z['606m814'], color='red', linestyle='-', label='1Z')
@@ -257,6 +256,7 @@ for row in data_phot.itertuples():
                     b=np.exp(-(col3-mod_col3)**2 / (2*col3_err**2))*np.exp(-(col2-mod_col2)**2 / (2*col3_err**2))*np.exp(-(col1-mod_col1)**2 / (2*col1_err**2))
                     c=np.log(a*b)
                     temp = temp.append({likelihood_column_name: c}, ignore_index=True)
+            temp.replace(axis=0,inplace=True,to_replace=[np.nan,np.inf,-np.inf],value=0)
             ssp_model.reset_index(inplace=True,drop=True)
             ssp_model[likelihood_column_name]=temp[likelihood_column_name]#; del temp
     
@@ -358,11 +358,12 @@ for row in data_phot.itertuples():
         
         ax22 = fig.add_axes([.8125,.39,.1750,.27])
         #sbn.kdeplot(np.exp(ssp_model_0p2Z['ml_mod0p2Z']),bw=((.1*np.exp(ssp_model_0p2Z['ml_mod0p2Z'])).max()/2.),color='darkorange',label='KDE', vertical=True)
-        ax22.plot(ssp_model_0p2Z['M_star_tot_to_Lv'],np.exp(ssp_model_0p2Z['ml_mod0p2Z']),linestyle='-',color='darkorange')
-        ax22.yaxis.set_visible(False)
+        ax22.plot(1e-9*10**(ssp_model_0p04Z['log_age_yr']),np.exp(ssp_model_0p04Z['ml_mod0p04Z']),linestyle='-',color='blue',label='0.04Z$_\odot$')
+        ax22.set_xlim(1.,15); ax22.set_xticks(np.arange(2,16,2))#; ax22.yaxis.set_visible(False)
         ax22.legend(fontsize=10,ncol=2,columnspacing=.5,markerscale=0.28,framealpha=0)
         ax2 = fig.add_axes([.6,.39,.1750,.27])
         ax2.set_ylabel("Likelihood value")
+        ax2.set_xlim(1.,15); ax2.set_xticks(np.arange(2,16,2))
         ax2.plot(1e-9*10**(ssp_model_0p2Z['log_age_yr']),np.exp(ssp_model_0p2Z['ml_mod0p2Z']),color='darkorange',linestyle='-',label='0.2Z$_\odot$', zorder=1)
         ax2.vlines(1e-9*10**(ssp_model_0p2Z['log_age_yr'][ssp_model_0p2Z['ml_mod0p2Z']==ssp_model_0p2Z['ml_mod0p2Z'].max()]),\
                    np.exp(ssp_model_0p2Z['ml_mod0p2Z'].min()),np.exp(data['max_ml_0p2Z'].max()),linestyle='-', colors='gray', zorder=2)
@@ -370,26 +371,29 @@ for row in data_phot.itertuples():
         
         ax33 = fig.add_axes([.8125,.71,.1750,.27])
         #sbn.kdeplot(np.e**(ssp_model_Z['ml_modZ']),bw=(.1*np.e**(ssp_model_Z['ml_modZ']).max()/2.),color='red',label='KDE', vertical=True)
-        ax33.plot(ssp_model_2p5Z['M_star_tot_to_Lv'],np.exp(ssp_model_2p5Z['ml_mod2p5Z']),linestyle='-',color='brown')
-        ax33.yaxis.set_visible(False)
+        ax33.plot(1e-9*10**(ssp_model_2p5Z['log_age_yr']),np.exp(ssp_model_2p5Z['ml_mod2p5Z']),linestyle='-',color='brown',label='2.5Z$_\odot$')
+        ax33.set_xlim(1.,15); ax33.set_xticks(np.arange(2,16,2))#;ax33.yaxis.set_visible(False)
         ax33.legend(fontsize=10,ncol=2,columnspacing=.5,markerscale=0.28,framealpha=0)
         ax3 = fig.add_axes([.6,.71,.1750,.27])
         ax3.set_ylabel("Likelihood value")
+        ax3.set_xlim(1.,15); ax3.set_xticks(np.arange(2,16,2))
         ax3.plot(1e-9*10**(ssp_model_Z['log_age_yr']),np.e**(ssp_model_Z['ml_modZ']),color='red',linestyle='-',label='Z$_\odot$')
         ax3.vlines(1e-9*10**(ssp_model_Z['log_age_yr'][ssp_model_Z['ml_modZ']==ssp_model_Z['ml_modZ'].max()]),np.exp(ssp_model_Z['ml_modZ'].min()),np.exp(data['max_ml_Z'].max()),linestyle='-', colors='gray')
         ax3.legend(loc=2,fontsize=10,ncol=2,columnspacing=.5,markerscale=0.28,framealpha=0)
         
         
         ax44 = fig.add_axes([.8125,.07,.1750,.27])
-        ax44.set_xlabel(r"$\rho_{Likelihood}$")
+        ax44.set_xlabel("Age [Gyr]")
+        ax44.set_xlim(1.,15); ax44.set_xticks(np.arange(2,16,2))
         #sbn.kdeplot(np.e**(ssp_model_0p04Z['ml_mod0p04Z']),bw=(.1*np.e**(ssp_model_0p04Z['ml_mod0p04Z']).max()/2.),color='blue',label='KDE', vertical=True)
-        ax44.plot(ssp_model_0p005Z['M_star_tot_to_Lv'],np.exp(ssp_model_0p005Z['ml_mod0p005Z']),linestyle='-',color='darkblue')
+        ax44.plot(1e-9*10**(ssp_model_0p005Z['log_age_yr']),np.exp(ssp_model_0p005Z['ml_mod0p005Z']),linestyle='-',color='darkblue',label='0.005Z$_\odot$')
 #        ax44.yaxis.set_visible(False)
         ax44.legend(fontsize=10,ncol=2,columnspacing=.5,markerscale=0.28,framealpha=0)
         ax4 = fig.add_axes([.6,.07,.1750,.27])
         ax4.set_xlabel("Age [Gyr]") ; plt.ylabel("Likelihood value")
-        ax4.plot(1e-9*10**(ssp_model_0p02Z['log_age_yr']),np.e**(ssp_model_0p02Z['ml_mod0p02Z']),color='blue',linestyle='-',label='0.02Z$_odot$')
-        ax4.vlines(1e-9*10**(ssp_model_0p02Z['log_age_yr'][ssp_model_0p02Z['ml_mod0p02Z']==ssp_model_0p02Z['ml_mod0p02Z'].max()]),np.exp(ssp_model_0p02Z['ml_mod0p02Z'].min()),np.exp(data['max_ml_0p02Z'].max()),linestyle='-', colors='gray')
+        ax4.set_xlim(1.,15); ax4.set_xticks(np.arange(2,16,2))
+        ax4.plot(1e-9*10**(ssp_model_0p02Z['log_age_yr']),np.e**(ssp_model_0p02Z['ml_mod0p02Z']),color='lightblue',linestyle='-',label='0.02Z$_\odot$')
+        ax4.vlines(1e-9*10**(ssp_model_0p02Z['log_age_yr'][ssp_model_0p02Z['ml_mod0p02Z']==ssp_model_0p02Z['ml_mod0p02Z'].max()]),np.exp(ssp_model_0p02Z['ml_mod0p02Z'].min()),np.exp(data['max_ml_0p02Z'].max()),linestyle='-', colors='gray',label='')
         ax4.legend(loc=2,fontsize=10,ncol=2,columnspacing=.5,markerscale=0.28,framealpha=0)
        
         plt.tight_layout()
