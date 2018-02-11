@@ -88,15 +88,15 @@ if example==True:
         example=input.example
     if input.m606 :
         data_phot['f606w']=input.m606
-    if input.m606 :
+    if input.m606_err :
         data_phot['f606w_err']=input.m606_err
     if input.m814 :
         data_phot['f814w']=input.m814
-    if input.m606 :
+    if input.m814_err :
         data_phot['f814w_err']=input.m814_err
     if input.m160 :
         data_phot['f160w']=input.m160
-    if input.m606 :
+    if input.m160_err :
         data_phot['f160w_err']=input.m160_err
     if input.lg_age_lim :
         lg_age_limit=input.lg_age_lim
@@ -109,10 +109,11 @@ if example==True:
     print(data_phot)
 else:
     data_file="match_phot_with_cat"
+    data_file="selGC_candidates"
     
     #data_phot=pd.read_table(data_file, delim_whitespace=True, engine='c', na_values='INDEF',\
     #                                  header=None, skiprows=1, comment='#', names=['f606w','f606w_err','f814w','f814w_err','f160w	','f160w_err'], usecols=[0,1,2,3,4,5])
-    data_phot0=pd.read_table(data_file, delim_whitespace=True, engine='c', na_values='INDEF',\
+    data_phot0=pd.read_table(data_file, delim_whitespace=True, engine='c', na_values='nan',\
                                       header=None, comment='#', names=['f160w','f160w_err','f606w','f606w_err','f814w','f814w_err','cat'], usecols=[18,19,20,21,22,23,24])
     data_phot=data_phot0[(data_phot0.f606w-data_phot0.f160w<=3.) & (data_phot0.f606w-data_phot0.f160w>=1.5)\
                          & (data_phot0.f606w-data_phot0.f814w<=1.1) & (data_phot0.f606w-data_phot0.f814w>=.5)]
@@ -171,10 +172,12 @@ for row in data_phot.itertuples():
         # SSP constant age lines
         
         m606m160_2Gyr=[]; m606m814_2Gyr=[]; m606m160_3Gyr=[]; m606m814_3Gyr=[]; m606m160_5Gyr=[]; m606m814_5Gyr=[]; m606m160_7Gyr=[]; m606m814_7Gyr=[]; m606m160_14Gyr=[]; m606m814_14Gyr=[]
-        for age_low,age_up,ssp_const_age_col1,ssp_const_age_col2 in zip([np.log10(1.99e9),np.log10(2.99e9),np.log10(4.99e9),np.log10(6.99e9),np.log10(13.99e9)],\
+        m814m160_2Gyr=[]; m814m160_3Gyr=[]; m814m160_5Gyr=[]; m814m160_7Gyr=[]; m814m160_14Gyr=[]
+        for age_low,age_up,ssp_const_age_col1,ssp_const_age_col2,ssp_const_age_col3 in zip([np.log10(1.99e9),np.log10(2.99e9),np.log10(4.99e9),np.log10(6.99e9),np.log10(13.99e9)],\
                                                                         [np.log10(2.01e9),np.log10(3.01e9),np.log10(5.01e9),np.log10(7.01e9),np.log10(14.01e9)],\
                                                                         [m606m160_2Gyr,m606m160_3Gyr,m606m160_5Gyr,m606m160_7Gyr,m606m160_14Gyr],\
-                                                                        [m606m814_2Gyr,m606m814_3Gyr,m606m814_5Gyr,m606m814_7Gyr,m606m814_14Gyr]):
+                                                                        [m606m814_2Gyr,m606m814_3Gyr,m606m814_5Gyr,m606m814_7Gyr,m606m814_14Gyr],\
+                                                                        [m814m160_2Gyr,m814m160_3Gyr,m814m160_5Gyr,m814m160_7Gyr,m814m160_14Gyr]):
             ssp_const_age_col1 += [ssp_model_0p005Z.loc[((ssp_model_0p005Z['log_age_yr']>=age_low) & (ssp_model_0p005Z['log_age_yr']<=age_up)), '606m160'].values[0],\
                                   ssp_model_0p04Z.loc[((ssp_model_0p04Z['log_age_yr']>=age_low) & (ssp_model_0p04Z['log_age_yr']<=age_up)), '606m160'].values[0],\
                                   ssp_model_0p2Z.loc[((ssp_model_0p2Z['log_age_yr']>=age_low) & (ssp_model_0p2Z['log_age_yr']<=age_up)), '606m160'].values[0],\
@@ -185,19 +188,29 @@ for row in data_phot.itertuples():
                                   ssp_model_0p2Z.loc[((ssp_model_0p2Z['log_age_yr']>=age_low) & (ssp_model_0p2Z['log_age_yr']<=age_up)), '606m814'].values[0],\
                                   ssp_model_Z.loc[((ssp_model_Z['log_age_yr']>=age_low) & (ssp_model_Z['log_age_yr']<=age_up)), '606m814'].values[0],\
                                   ssp_model_2p5Z.loc[((ssp_model_2p5Z['log_age_yr']>=age_low) & (ssp_model_2p5Z['log_age_yr']<=age_up)), '606m814'].values[0]]
+            ssp_const_age_col3 += [ssp_model_0p005Z.loc[((ssp_model_0p005Z['log_age_yr']>=age_low) & (ssp_model_0p005Z['log_age_yr']<=age_up)), '814m160'].values[0],\
+                                  ssp_model_0p04Z.loc[((ssp_model_0p04Z['log_age_yr']>=age_low) & (ssp_model_0p04Z['log_age_yr']<=age_up)), '814m160'].values[0],\
+                                  ssp_model_0p2Z.loc[((ssp_model_0p2Z['log_age_yr']>=age_low) & (ssp_model_0p2Z['log_age_yr']<=age_up)), '814m160'].values[0],\
+                                  ssp_model_Z.loc[((ssp_model_Z['log_age_yr']>=age_low) & (ssp_model_Z['log_age_yr']<=age_up)), '814m160'].values[0],\
+                                  ssp_model_2p5Z.loc[((ssp_model_2p5Z['log_age_yr']>=age_low) & (ssp_model_2p5Z['log_age_yr']<=age_up)), '814m160'].values[0]]
         
         ax1.plot(m606m160_2Gyr,m606m814_2Gyr,linestyle='--',color='gray',zorder=0)
         ax1.plot(m606m160_3Gyr,m606m814_3Gyr,linestyle='--',color='gray',zorder=0)
         ax1.plot(m606m160_5Gyr,m606m814_5Gyr,linestyle='--',color='gray',zorder=0)
         ax1.plot(m606m160_7Gyr,m606m814_7Gyr,linestyle='--',color='gray',zorder=0)
         ax1.plot(m606m160_14Gyr,m606m814_14Gyr,linestyle='--',color='gray',zorder=0)
+#        ax1.plot(m814m160_2Gyr,m606m814_2Gyr,linestyle='--',color='gray',zorder=0)
+#        ax1.plot(m814m160_3Gyr,m606m814_3Gyr,linestyle='--',color='gray',zorder=0)
+#        ax1.plot(m814m160_5Gyr,m606m814_5Gyr,linestyle='--',color='gray',zorder=0)
+#        ax1.plot(m814m160_7Gyr,m606m814_7Gyr,linestyle='--',color='gray',zorder=0)
+#        ax1.plot(m814m160_14Gyr,m606m814_14Gyr,linestyle='--',color='gray',zorder=0)
         
-        ax1.plot(ssp_model_0p005Z['606m160'],ssp_model_0p005Z['606m814'], color='darkblue', linestyle='-', label='0.005Z$_\odot$',zorder=0)
-        #ax1.plot(ssp_model_0p02Z['606m160'],ssp_model_0p02Z['606m814'], color='darkblue', linestyle='-', label='0.02Z$_\odot$',zorder=0)
-        ax1.plot(ssp_model_0p04Z['606m160'],ssp_model_0p04Z['606m814'], color='blue', linestyle='-', label='0.04Z$_\odot$',zorder=0)
-        ax1.plot(ssp_model_0p2Z['606m160'],ssp_model_0p2Z['606m814'], color='darkorange', linestyle='-', label='0.2Z$_\odot$',zorder=0)
+        ax1.plot(ssp_model_0p005Z['606m160'],ssp_model_0p005Z['606m814'], color='darkblue', linestyle='-', label='0.005Z$_odot$',zorder=0)
+        #ax1.plot(ssp_model_0p02Z['606m160'],ssp_model_0p02Z['606m814'], color='darkblue', linestyle='-', label='0.02Z$_odot$',zorder=0)
+        ax1.plot(ssp_model_0p04Z['606m160'],ssp_model_0p04Z['606m814'], color='blue', linestyle='-', label='0.04Z$_odot$',zorder=0)
+        ax1.plot(ssp_model_0p2Z['606m160'],ssp_model_0p2Z['606m814'], color='darkorange', linestyle='-', label='0.2Z$_odot$',zorder=0)
         ax1.plot(ssp_model_Z['606m160'],ssp_model_Z['606m814'], color='red', linestyle='-', label='1Z')
-        ax1.plot(ssp_model_2p5Z['606m160'],ssp_model_2p5Z['606m814'], color='brown', linestyle='-', label='2.5Z$_\odot$',zorder=0)
+        ax1.plot(ssp_model_2p5Z['606m160'],ssp_model_2p5Z['606m814'], color='brown', linestyle='-', label='2.5Z$_odot$',zorder=0)
         ax1.errorbar(data.f606w-data.f160w,data.f606w-data.f814w,\
                      xerr=np.sqrt(data.f606w_err**2+data.f160w_err**2),\
                      yerr=np.sqrt(data.f606w_err**2+data.f814w_err**2),marker='.',color='gray',zorder=1)
@@ -241,8 +254,8 @@ for row in data_phot.itertuples():
     #                print(mod_col1,mod_col2,mod_col3,np.sqrt(col1_err**2 + ((2./3.)*(abs(data.f606w-data.f160w-mod_col1).values[0]*abs(data.f606w-data.f814w-mod_col2).values[0]*abs(data.f606w-data.f814w-mod_col3).values[0]))))
     #                col2_err=np.sqrt(col2_err**2 + ((2./3.)*((data.f606w-data.f160w-mod_col1).values[0]*(data.f606w-data.f814w-mod_col2).values[0]*(data.f606w-data.f814w-mod_col3).values[0])))
     #                col3_err=np.sqrt(col3_err**2 + ((2./3.)*((data.f606w-data.f160w-mod_col1).values[0]*(data.f606w-data.f814w-mod_col2).values[0]*(data.f606w-data.f814w-mod_col3).values[0])))
-                    a=(1./(col1_err*np.sqrt(2.*np.pi)))*(1./(col2_err*np.sqrt(2.*np.pi)))*(1./(col3_err*np.sqrt(2.*np.pi)))
-                    b=np.exp(-(col1-mod_col1)**2 / (2*col1_err**2))*np.exp(-(col2-mod_col2)**2 / (2*col2_err**2))*np.exp(-(col3-mod_col3)**2 / (2*col3_err**2))
+                    a=(1./(col3_err*np.sqrt(2.*np.pi)))*(1./(col2_err*np.sqrt(2.*np.pi)))*(1./(col1_err*np.sqrt(2.*np.pi)))
+                    b=np.exp(-(col3-mod_col3)**2 / (2*col3_err**2))*np.exp(-(col2-mod_col2)**2 / (2*col3_err**2))*np.exp(-(col1-mod_col1)**2 / (2*col1_err**2))
                     c=np.log(a*b)
                     temp = temp.append({likelihood_column_name: c}, ignore_index=True)
             ssp_model.reset_index(inplace=True,drop=True)
