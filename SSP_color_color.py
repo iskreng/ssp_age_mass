@@ -256,7 +256,7 @@ for row in data_phot.itertuples():
                     b=np.exp(-(col3-mod_col3)**2 / (2*col3_err**2))*np.exp(-(col2-mod_col2)**2 / (2*col3_err**2))*np.exp(-(col1-mod_col1)**2 / (2*col1_err**2))
                     c=np.log(a*b)
                     temp = temp.append({likelihood_column_name: c}, ignore_index=True)
-            temp.replace(axis=0,inplace=True,to_replace=[np.nan,np.inf,-np.inf],value=0)
+            temp.replace(axis=0,inplace=True,to_replace=[np.nan,np.inf,-np.inf],value=-1e1)
             ssp_model.reset_index(inplace=True,drop=True)
             ssp_model[likelihood_column_name]=temp[likelihood_column_name]#; del temp
     
