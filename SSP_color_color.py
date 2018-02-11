@@ -114,6 +114,7 @@ else:
     
     data_phot0=pd.read_table(data_file, delim_whitespace=True, engine='c', na_values='nan',\
                                       header=None, comment='#', names=['f160w','f160w_err','f606w','f606w_err','f814w','f814w_err','cat'], usecols=[18,19,20,21,22,23,24])
+#    data_phot0=pd.read_table(data_file, delim_whitespace=True, engine='c', na_values='NaN')
     data_phot=data_phot0[(data_phot0.f606w-data_phot0.f160w<=3.) & (data_phot0.f606w-data_phot0.f160w>=1.5)\
                          & (data_phot0.f606w-data_phot0.f814w<=1.1) & (data_phot0.f606w-data_phot0.f814w>=.5)]
     
