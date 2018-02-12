@@ -12,7 +12,7 @@ warnings.filterwarnings('ignore')
 example=True                # Run for a single "example" data point?
 DM=34.9                     # Distance modulus
 lg_age_limit=np.log10(2e9)    # Minimum SSP age to be considered
-lg_age_up_limit=np.log10(14.5e9)    # Maximum SSP age to be considered
+lg_age_up_limit=np.log10(14.99e9)    # Maximum SSP age to be considered
 M_sun_f606w=4.66            # Abs magnitude of the Sun
 ssp_lum_scale=1e6           # Scale the SSP model to 1e6 L_sun
 
@@ -367,19 +367,19 @@ for row in data_phot.itertuples():
         ax2.set_xlim(1.,15); ax2.set_xticks(np.arange(2,16,2))
         ax2.plot(1e-9*10**(ssp_model_0p2Z['log_age_yr']),np.exp(ssp_model_0p2Z['ml_mod0p2Z']),color='darkorange',linestyle='-',label='0.2Z$_\odot$', zorder=1)
         ax2.vlines(1e-9*10**(ssp_model_0p2Z['log_age_yr'][ssp_model_0p2Z['ml_mod0p2Z']==ssp_model_0p2Z['ml_mod0p2Z'].max()]),\
-                   np.exp(ssp_model_0p2Z['ml_mod0p2Z'].min()),np.exp(data['max_ml_0p2Z'].max()),linestyle='-', colors='gray', zorder=2)
+                   np.exp(ssp_model_0p2Z['ml_mod0p2Z'].min()),np.exp(data['max_ml_0p2Z'].max()),linestyle='-', colors='gray', zorder=2, label='')
         ax2.legend(loc=2,fontsize=10,ncol=2,columnspacing=.5,markerscale=0.28,framealpha=0)
         
         ax33 = fig.add_axes([.8125,.71,.1750,.27])
         #sbn.kdeplot(np.e**(ssp_model_Z['ml_modZ']),bw=(.1*np.e**(ssp_model_Z['ml_modZ']).max()/2.),color='red',label='KDE', vertical=True)
-        ax33.plot(1e-9*10**(ssp_model_2p5Z['log_age_yr']),np.exp(ssp_model_2p5Z['ml_mod2p5Z']),linestyle='-',color='brown',label='2.5Z$_\odot$')
+        ax33.plot(1e-9*10**(ssp_model_2p5Z['log_age_yr']),np.exp(ssp_model_Z['ml_modZ']),linestyle='-',color='red',label='Z$_\odot$')
         ax33.set_xlim(1.,15); ax33.set_xticks(np.arange(2,16,2))#;ax33.yaxis.set_visible(False)
         ax33.legend(fontsize=10,ncol=2,columnspacing=.5,markerscale=0.28,framealpha=0)
         ax3 = fig.add_axes([.6,.71,.1750,.27])
         ax3.set_ylabel("Likelihood value")
         ax3.set_xlim(1.,15); ax3.set_xticks(np.arange(2,16,2))
-        ax3.plot(1e-9*10**(ssp_model_Z['log_age_yr']),np.e**(ssp_model_Z['ml_modZ']),color='red',linestyle='-',label='Z$_\odot$')
-        ax3.vlines(1e-9*10**(ssp_model_Z['log_age_yr'][ssp_model_Z['ml_modZ']==ssp_model_Z['ml_modZ'].max()]),np.exp(ssp_model_Z['ml_modZ'].min()),np.exp(data['max_ml_Z'].max()),linestyle='-', colors='gray')
+        ax3.plot(1e-9*10**(ssp_model_2p5Z['log_age_yr']),np.e**(ssp_model_2p5Z['ml_mod2p5Z']),color='brown',linestyle='-',label='2.5Z$_\odot$')
+        ax3.vlines(1e-9*10**(ssp_model_2p5Z['log_age_yr'][ssp_model_2p5Z['ml_mod2p5Z']==ssp_model_2p5Z['ml_mod2p5Z'].max()]),np.exp(ssp_model_2p5Z['ml_mod2p5Z'].min()),np.exp(data['max_ml_2p5Z'].max()),linestyle='-', colors='gray', label='')
         ax3.legend(loc=2,fontsize=10,ncol=2,columnspacing=.5,markerscale=0.28,framealpha=0)
         
         
