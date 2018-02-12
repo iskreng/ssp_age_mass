@@ -9,7 +9,7 @@ warnings.filterwarnings('ignore')
 
 ##### BEGIN: User input #####
 
-example=False                # Run for a single "example" data point?
+example=True                # Run for a single "example" data point?
 DM=34.9                     # Distance modulus
 lg_age_limit=np.log10(2e9)    # Minimum SSP age to be considered
 lg_age_up_limit=np.log10(14.5e9)    # Maximum SSP age to be considered
