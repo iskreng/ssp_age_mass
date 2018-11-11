@@ -111,6 +111,7 @@ if example==True:
 else:
     data_file="match_phot_with_cat"
     data_file="selGC_candidates"
+    data_file='test_in_mag.dat'
     
     data_phot0=pd.read_table(data_file, delim_whitespace=True, engine='c', na_values='nan',\
                                       header=None, comment='#', names=['f160w','f160w_err','f606w','f606w_err','f814w','f814w_err','cat'], usecols=[18,19,20,21,22,23,24])
@@ -124,7 +125,8 @@ newdata=pd.DataFrame()
 object_no=0 # Set a proper object number to print
 for row in data_phot.itertuples():
     if example==True:
-        index,gg,ee,ff,aa,bb,cc,dd=row
+        print(row)
+        index,aa,bb,cc,dd,ee,ff,gg=row
         data=pd.DataFrame({'f606w' : [aa],\
                        'f606w_err' : [bb],\
                        'f814w' : [cc],\
@@ -257,7 +259,7 @@ for row in data_phot.itertuples():
                     b=np.exp(-(col3-mod_col3)**2 / (2*col3_err**2))*np.exp(-(col2-mod_col2)**2 / (2*col3_err**2))*np.exp(-(col1-mod_col1)**2 / (2*col1_err**2))
                     c=np.log(a*b)
                     temp = temp.append({likelihood_column_name: c}, ignore_index=True)
-            temp.replace(axis=0,inplace=True,to_replace=[np.nan,np.inf,-np.inf],value=-1e1)
+#            temp.replace(axis=0,inplace=True,to_replace=[np.nan,np.inf,-np.inf],value=-1e1)
             ssp_model.reset_index(inplace=True,drop=True)
             ssp_model[likelihood_column_name]=temp[likelihood_column_name]#; del temp
     
@@ -380,7 +382,7 @@ for row in data_phot.itertuples():
         ax33.set_xlim(1.,15); ax33.set_xticks(np.arange(2,16,2))#;ax33.yaxis.set_visible(False)
         ax33.legend(fontsize=10,ncol=2,columnspacing=.5,markerscale=0.28,framealpha=0)
         ax3 = fig.add_axes([.6,.71,.1750,.27])
-        ax3.set_ylabel("Likelihood value")
+        ax3.set_ylabel("Likelihood value")#; ax3.yaxis.set_major_formatter('{:%.2e}')
         ax3.set_xlim(1.,15); ax3.set_xticks(np.arange(2,16,2))
         ax3.plot(1e-9*10**(ssp_model_2p5Z['log_age_yr']),np.e**(ssp_model_2p5Z['ml_mod2p5Z']),color='brown',linestyle='-',label='2.5Z$_\odot$')
         ax3.vlines(1e-9*10**(ssp_model_2p5Z['log_age_yr'][ssp_model_2p5Z['ml_mod2p5Z']==ssp_model_2p5Z['ml_mod2p5Z'].max()]),np.exp(ssp_model_2p5Z['ml_mod2p5Z'].min()),np.exp(data['max_ml_2p5Z'].max()),linestyle='-', colors='gray', label='')
